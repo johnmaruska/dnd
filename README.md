@@ -20,6 +20,10 @@ FIXME: listing of options this app accepts.
 
 ...
 
+### TODO
+
+- After character static generation, implement player choice for relevant traits
+
 ### Bugs
 
 ...

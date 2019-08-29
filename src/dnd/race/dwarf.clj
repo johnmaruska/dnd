@@ -1,62 +1,52 @@
 (ns dnd.race.dwarf
   (:require [clojure.set :refer [union]]
-            [dnd.stat :as stat]
+            [dnd.alignment :as alignment]
+            [dnd.armor :as armor]
             [dnd.language :as language]
+            [dnd.stat :as stat :refer [increase-ability-score]]
             [dnd.weapon :as weapon]))
 
-(def traits
-  {:mature-age 50
+(defn apply-dwarven-combat-training [player]
+  (update player :proficiencies (partial union #{weapon/battleaxe
+                                                 weapon/handaxe
+                                                 weapon/throwing-hammer
+                                                 weapon/warhammer})))
+
+(defn apply-dwarven-armor-training [player]
+  (update player :proficiencies (partial union #{armor/light
+                                                 armor/medium})))
+
+;; TODO: Stonecunning
+;; TODO Dwarven Resilience
+
+;; Player's Handbook Ch2 - Dwarf page 20
+(def ^:private traits
+  {:race :dwarf
+   :mature-age 50
    :max-age 350
    :short-height 4
    :tall-height 5
    :alignments [alignment/lawful alignment/good]
    :base-speed 25
    :size :medium
-   :features-and-traits #{:darkvision
-                          :dwarven-resilience
-                          :stonecunning}})
+   :languages #{language/common language/dwarvish}
+   :features-traits #{:darkvision
+                      :dwarven-resilience
+                      :stonecunning}
+   :applicable-traits [{:dwarven-combat-training apply-dwarven-combat-training}
+                       {:ability-score-increase #(increase-ability-score % stat/CON 2)}]
+   :choosable-traits [{:tool-proficiency #{:smiths-tools :brewers-supplies :masons-tools}}]})
 
 (def hill-dwarf-traits
   (-> traits
-      (update :features-and-traits (partial union #{:dwarven-toughness}))))
+      (assoc :subrace :hill-dwarf)
+      (update :features-traits (partial union #{:dwarven-toughness}))
+      (update :applicable-traits
+              (partial cons {:ability-score-increase #(increase-ability-score % stat/WIS 1)}))))
 
-;; Player's Handbook Ch2 - Dwarf page 20
-(defn apply-race [player]
-  (if (not (:race player))
-    (-> player
-        (assoc :race :dwarf)
-        (update-in [:ability-scores stat/CON] #(stat/+ 2 %))
-        (assoc-in :size :medium)
-        (assoc-in :base-speed 25)
-        ;; weapon proficiencies
-        (update :proficiencies (partial concat [weapon/battleaxe
-                                                weapon/handaxe
-                                                weapon/throwing-hammer
-                                                weapon/warhammer]))
-        ;; TODO: user picks one of Smith's Tools, Brewer's supplies, Mason's Tools
-        (update :languages (partial union #{language/common
-                                            language/dwarvish}))
-        )
-    player))
-
-(defn apply-hill-dwarf [player]
-  (let [race (:race player)
-        applicable? (and (or (nil? race) (= :dwarf race))
-                         (not (:subrace player)))]
-    (if applicable?
-      (-> player
-          apply-race
-          (update-in [:ability-scores stat/WIS] stat/inc)
-          (update :features-and-traits (partial union #{:dwarven-toughness})))
-      player)))
-
-(defn apply-mountain-dwarf [player]
-  (let [race (:race player)
-        applicable? (and (or (nil? race) (= :dwarf race))
-                         (not (:subrace player)))]
-    (if applicable?
-      (-> player
-          apply-race
-          (update-in [:ability-scores stat/STR] (partial stat/+ 2))
-          (update :proficiencies (partial concat [armor/light armor/medium])))
-      player)))
+(def mountain-dwarf-traits
+  (-> traits
+      (assoc :subrace :mountain-dwarf)
+      (update applicable-traits
+              (partial concat [{:dwarven-armor-training apply-dwarven-armor-training}
+                               {:ability-score-increase #(increase-ability-score % stat/STR 2)}]))))

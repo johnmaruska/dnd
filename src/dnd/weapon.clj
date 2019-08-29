@@ -1,7 +1,8 @@
 (ns dnd.weapon)
 
 (def example-weapon
-  {:properties [:light :finesse :thrown]
+  {:name :sword
+   :properties [:light :finesse :thrown]
    :type :melee})
 
 

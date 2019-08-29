@@ -16,9 +16,11 @@
 (defn inc [n]
   (min 30 (core-inc n)))
 
-(defn update-ability-score
-  [player stat value]
+(defn update-ability-score [player stat value]
   (assoc-in player [:ability-scores stat] value))
+
+(defn increase-ability-score [player stat amount]
+  (update-in player [:ability-scores stat] (partial stat/+ amount)))
 
 ;; TODO: ability score point cost
 ;; Player's Handbook Ch1.3 page 13
