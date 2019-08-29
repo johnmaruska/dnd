@@ -1,6 +1,10 @@
 (ns dnd.race.elf
   (:require [clojure.set :refer [difference union]]
-            [dnd.stat :as stat :refer [increase-ability-score]]))
+            [dnd.alignment :as alignment]
+            [dnd.language :as language]
+            [dnd.skill :as skill]
+            [dnd.stat :as stat :refer [increase-ability-score]]
+            [dnd.weapon :as weapon]))
 
 (defn apply-elf-weapon-training [player]
   (update player :proficiencies (partial union #{weapon/longsword
@@ -8,7 +12,6 @@
                                                  weapon/shortbow
                                                  weapon/longbow})))
 
-;; TODO: name?
 (defn apply-drow-weapon-training [player]
   (update player :proficiencies (partial union #{weapon/rapier
                                                  weapon/shortsword
@@ -33,36 +36,32 @@
                       :fey-ancestry
                       :trance}
    :applicable-traits [{:ability-score-increase #(increase-ability-score % stat/DEX 2)}
-                       ;; TODO: add proficiency in perception
-                       ]})
+                       {:keen-senses #(update % :proficiencies
+                                              (partial union #{skill/perception}))}]})
 
-;; TODO: fill out
-(def dark-elf-traits
-  (-> traits
-      (update :alignments #(difference % #{alignment/good}))
-      (update :alignments #(union % #{alignment/evil}))
-      (update :applicable-traits
-              (partial concat [{:ability-score-increase #(increase-ability-score % stat/CHA 1)}
-                               ;; TODO: name?
-                               {:drow-weapon-training apply-drow-weapon-training}]))
-      (update :features-traits (partial union #{:superior-darkvision
-                                                :sunlight-sensitivity
-                                                :drow-magic}))))
-(def drow-traits dark-elf-traits)
-
-;; TODO: verify
 (def high-elf-traits
   (-> traits
       (update :applicable-traits
               (partial concat [{:elf-weapon-training apply-elf-weapon-training}
                                {:ability-score-increase #(increase-ability-score % stat/INT 1)}]))
       (update :features-traits (partial union #{:cantrip}))
-      (update :choosable-traits [{:extra-language (set languages/all)}])))
+      (update :choosable-traits [{:extra-language (set language/all)}])))
 
-;; TODO: verify
 (def wood-elf-traits
   (-> traits
+      (assoc :base-speed 35)
       (update :applicable-traits
               (partial concat [{:ability-score-increase #(increase-ability-score % stat/WIS 1)}
                                {:elf-weapon-training apply-elf-weapon-training}]))
       (update :features-traits (partial union #{:mask-of-the-wild}))))
+
+(def dark-elf-traits
+  (-> traits
+      (update :alignments #(difference % #{alignment/good}))
+      (update :alignments #(union % #{alignment/evil}))
+      (update :applicable-traits
+              (partial concat [{:ability-score-increase #(increase-ability-score % stat/CHA 1)}
+                               {:drow-weapon-training apply-drow-weapon-training}]))
+      (update :features-traits (partial union #{:superior-darkvision
+                                                :sunlight-sensitivity
+                                                :drow-magic}))))
