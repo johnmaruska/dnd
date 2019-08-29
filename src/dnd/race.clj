@@ -1,5 +1,6 @@
 (ns dnd.race
-  (:require [dnd.race.dwarf :as dwarf]))
+  (:require [dnd.race.dwarf :as dwarf]
+            [dnd.race.elf :as elf]))
 
 (def hill-dwarf :hill-dwarf)
 (def mountain-dwarf :mountain-dwarf)
