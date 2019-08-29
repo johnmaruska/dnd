@@ -15,7 +15,7 @@
                     stat/WIS 6}
    ;; TODO: split proficiencies into categories?
    :proficiencies []
-   :race race/dwarf
+   :race race/hill-dwarf
    :base-speed 25
    :size :medium
    :features-and-traits #{:darkvision}

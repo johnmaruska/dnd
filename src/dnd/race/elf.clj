@@ -1,80 +1,68 @@
 (ns dnd.race.elf
-  (:require [clojure.set :refer [difference union]]))
+  (:require [clojure.set :refer [difference union]]
+            [dnd.stat :as stat :refer [increase-ability-score]]))
+
+(defn apply-elf-weapon-training [player]
+  (update player :proficiencies (partial union #{weapon/longsword
+                                                 weapon/shortsword
+                                                 weapon/shortbow
+                                                 weapon/longbow})))
+
+;; TODO: name?
+(defn apply-drow-weapon-training [player]
+  (update player :proficiencies (partial union #{weapon/rapier
+                                                 weapon/shortsword
+                                                 weapon/hand-crossbow})))
+
+(defn apply-ability-score-increase [stat val]
+  (fn [player]
+    (increase-ability-score player stat val)))
 
 (def traits
-  {:mature-age 100
-   :max-age 750
-   :short-height 5
-   :tall-height 6
+  {:race :elf
+   :physical-characteristics {:mature-age 100
+                              :max-age 750
+                              :short-height 5
+                              :tall-height 6
+                              :estimated-weight 150}
    :size :medium
    :alignments #{alignment/chaotic alignment/good}
    :base-speed 30
-   :features-and-traits #{:darkvision
-                          :fey-ancestry
-                          :trance}})
+   :languages #{language/common language/elvish}
+   :features-traits #{:darkvision
+                      :fey-ancestry
+                      :trance}
+   :applicable-traits [{:ability-score-increase #(increase-ability-score % stat/DEX 2)}
+                       ;; TODO: add proficiency in perception
+                       ]})
 
-
-
-(def drow-elf-traits
+;; TODO: fill out
+(def dark-elf-traits
   (-> traits
       (update :alignments #(difference % #{alignment/good}))
-      (update :alignments #(union % #{alignment/evil}))))
+      (update :alignments #(union % #{alignment/evil}))
+      (update :applicable-traits
+              (partial concat [{:ability-score-increase #(increase-ability-score % stat/CHA 1)}
+                               ;; TODO: name?
+                               {:drow-weapon-training apply-drow-weapon-training}]))
+      (update :features-traits (partial union #{:superior-darkvision
+                                                :sunlight-sensitivity
+                                                :drow-magic}))))
+(def drow-traits dark-elf-traits)
 
+;; TODO: verify
 (def high-elf-traits
   (-> traits
-      ))
+      (update :applicable-traits
+              (partial concat [{:elf-weapon-training apply-elf-weapon-training}
+                               {:ability-score-increase #(increase-ability-score % stat/INT 1)}]))
+      (update :features-traits (partial union #{:cantrip}))
+      (update :choosable-traits [{:extra-language (set languages/all)}])))
 
-(defn apply-elf-weapon-training [player]
-  (update player :proficiencies (partial concat [weapon/longsword
-                                                 weapon/shortsword
-                                                 weapon/shortbow
-                                                 weapon/longbow])))
-
-(defn apply-race [player]
-  (if (not (:race player))
-    (-> player
-        (assoc :race :elf)
-        (update-in [:ability-scores stat/DEX] (partial stat/+ 2))
-        ;; skill proficiencies
-        (update :proficiencies (partial conj skill/perception))
-        (update :languages (partial concat [language/common language/elvish])))
-    player))
-
-(defn can-apply-subrace? [player]
-  (let [race (:race player)]
-    (and (or (nil? race) (= :elf race))
-         (not (:subrace player)))))
-
-(defn apply-high-elf [player]
-  (if (can-apply-subrace? player)
-    (-> player
-        apply-race
-        (update-in [:ability-scores stat/INT] stat/inc)
-        ;; weapon proficiencies
-        apply-elf-weapon-training
-        (update :features-and-traits (partial union #{:cantrip
-                                                      :extra-language})))
-    player))
-
-(defn apply-wood-elf [player]
-  (if (can-apply-subrace? player)
-    (-> player
-        apply-race
-        (update-in [:ability-score stat/WIS] stat/inc)
-        apply-elf-weapon-training
-        (update :features-and-traits (partial union #{:mask-of-the-wild})))
-    player))
-
-(defn apply-dark-elf [player]
-  (if (can-apply-subrace? player)
-    (-> player
-        apply-race
-        (update-in [:ability-score stat/CHA stat/inc])
-        (update :features-and-traits (partial union #{:superior-darkvision
-                                                      :sunlight-sensitivity
-                                                      :drow-magic}))
-        (update :proficiencies (partial concat [weapon/rapier
-                                                weapon/shortsword
-                                                weapon/hand-crossbow])))
-    player))
-(def apply-drow apply-dark-elf)
+;; TODO: verify
+(def wood-elf-traits
+  (-> traits
+      (update :applicable-traits
+              (partial concat [{:ability-score-increase #(increase-ability-score % stat/WIS 1)}
+                               {:elf-weapon-training apply-elf-weapon-training}]))
+      (update :features-traits (partial union #{:mask-of-the-wild}))))

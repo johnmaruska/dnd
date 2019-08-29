@@ -26,6 +26,7 @@
    :max-age 350
    :short-height 4
    :tall-height 5
+   :estimated-weight 150
    :alignments [alignment/lawful alignment/good]
    :base-speed 25
    :size :medium
@@ -47,6 +48,6 @@
 (def mountain-dwarf-traits
   (-> traits
       (assoc :subrace :mountain-dwarf)
-      (update applicable-traits
+      (update :applicable-traits
               (partial concat [{:dwarven-armor-training apply-dwarven-armor-training}
                                {:ability-score-increase #(increase-ability-score % stat/STR 2)}]))))
