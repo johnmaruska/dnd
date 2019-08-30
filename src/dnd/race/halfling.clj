@@ -20,3 +20,10 @@
    :applicable-traits [(trait/ability-score-increase stat/DEX 2)]
    :choosable-traits []
    :features-traits #{:lucky :brave :halfling-nimbleness}})
+
+(def lightfoot-halfling-traits
+  (-> traits
+      (update :applicable-traits
+              (partial cons (trait/ability-score-increase stat/CHA 2)))
+      (update :feature-traits
+              (partial cons :naturally-stealthy))))

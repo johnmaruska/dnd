@@ -37,11 +37,11 @@
 ;; Player's Handbook Ch1.3 page 13
 (defn get-ability-modifier
   "Retrieve derived trait "
-  [player stat]
+  [player ability]
   ;; magic numbers derived from tables provided in PHB
-  (-> (util/div (- (get-in player [:ability-scores stat])
-                   10)
-                2)))
+  (-> (get-in player [:ability-scores ability])
+      (- 10)
+      (util/div 2)))
 
 ;; Player's Handbook Ch1.5 page 14
 (defn armor-class [player]

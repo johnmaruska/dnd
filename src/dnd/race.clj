@@ -17,13 +17,12 @@
 (defn get-traits [race]
   (case race
     ;; dwarf
-    hill-dwarf dwarf/hill-dwarf-traits
+    hill-dwarf     dwarf/hill-dwarf-traits
     mountain-dwarf dwarf/mountain-dwarf-traits
     ;; elf
-    dark-elf elf/drow-traits
-    high-elf elf/high-elf-traits
-    wood-elf elf/wood-elf-traits
-    ))
+    dark-elf       elf/drow-traits
+    high-elf       elf/high-elf-traits
+    wood-elf       elf/wood-elf-traits))
 
 (defn apply-traits [player traits]
   (reduce (fn [p [_ apply-trait]] (apply-trait p))

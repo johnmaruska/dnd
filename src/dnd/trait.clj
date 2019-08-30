@@ -20,6 +20,7 @@
 ;; TODO: Superior Darkvision (Elf, PHB p24)
 ;; TODO: Tool Proficiency (Dwarf, PHB p20)
 ;; TODO: Trance (Elf, PHB p23)
+;; TODO: Naturally stealthy
 
 (defn ability-score-increase [ability amount]
   {:ability-score-increase #(increase-ability-score % ability amount)})
