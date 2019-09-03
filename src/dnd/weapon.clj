@@ -1,4 +1,7 @@
-(ns dnd.weapon)
+(ns dnd.weapon
+  (:require [dnd.dice :as dice]
+            [dnd.player :as player]
+            [dnd.stat :as stat]))
 
 (def example-weapon
   {:name :sword
@@ -7,16 +10,23 @@
 
 
 (def battleaxe :battleaxe)
+(def hand-crossbow :hand-crossbow)
 (def handaxe :handaxe)
+(def longbow :longbow)
+(def longsword :longsword)
+(def rapier :rapier)
+(def shortbow :shortbow)
+(def shortsword :shortsword)
 (def throwing-hammer :throwing-hammer)
 (def warhammer :warhammer)
 
+(defn finesse? [weapon] (contains? (:properties weapon) :finesse))
 
-(defn finesse? [weapon]
-  (contains? (:properties weapon) :finesse))
+(defn thrown? [weapon] (contains? (:properties weapon) :thrown))
 
-(defn thrown? [weapon]
-  (contains? (:properties weapon) :thrown))
+(defn melee? [weapon] (= :melee (:type weapon)))
+
+(defn ranged? [weapon] (= :ranged (:type weapon)))
 
 ;; Player's Handbook Ch1.5 page 14
 (defn melee-bonus
@@ -43,6 +53,6 @@
      (if (player/proficient? player weapon)
        (:proficiency-bonus player)
        0)
-     (if (weapon/melee? weapon)
+     (if (melee? weapon)
        (melee-bonus player weapon)
        (ranged-bonus player weapon))))

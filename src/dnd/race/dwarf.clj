@@ -2,26 +2,25 @@
   (:require [clojure.set :refer [union]]
             [dnd.alignment :as alignment]
             [dnd.language :as language]
+            [dnd.stat :as stat]
             [dnd.trait :as trait]))
 
 ;; Player's Handbook Ch2 - Dwarf page 20
 (def ^:private traits
-  {:race :dwarf
-   :age {:maturity 50
-         :lifespan 350}
+  {:age {:maturity 50 :lifespan 350}
    :alignments [alignment/lawful alignment/good]
-   :base-speed 25  ;; TODO: not reduced by heavy armor
-   :size {:class :medium
-          :low-end 4
-          :high-end 5
-          :estimated-weight 150}
-   :languages #{language/common language/dwarvish}
-   :features-traits #{:darkvision
-                      :dwarven-resilience
-                      :stonecunning}
    :applicable-traits [trait/dwarven-combat-training
                        (trait/ability-score-increase stat/CON 2)]
-   :choosable-traits [{:tool-proficiency #{:smiths-tools :brewers-supplies :masons-tools}}]})
+   :base-speed 25  ;; TODO: not reduced by heavy armor
+   :choosable-traits [{:tool-proficiency #{:smiths-tools
+                                           :brewers-supplies
+                                           :masons-tools}}]
+   :features-traits #{:darkvision :dwarven-resilience :stonecunning}
+   :height {:short 4 :tall 5}
+   :languages #{language/common language/dwarvish}
+   :size :medium
+   :weight {:average 150}
+   :race :dwarf})
 
 (def hill-dwarf-traits
   (-> traits

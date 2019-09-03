@@ -6,6 +6,8 @@
 (def lawful :lawful)
 (def chaotic :chaotic)
 
+(def all [good evil lawful chaotic neutral])
+
 (def chaotic-evil    {:legality chaotic :morality evil})
 (def chaotic-neutral {:legality chaotic :morality neutral})
 (def chaotic-good    {:legality chaotic :morality good})

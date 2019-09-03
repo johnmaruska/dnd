@@ -7,11 +7,9 @@
 
 (def traits
   {:race :elf
-   :physical-characteristics {:mature-age 100
-                              :max-age 750
-                              :short-height 5
-                              :tall-height 6
-                              :estimated-weight 150}
+   :age {:maturity 100 :lifespan 750}
+   :height {:short 5 :tall 6}
+   :weight {:average 150}
    :size :medium
    :alignments #{alignment/chaotic alignment/good}
    :base-speed 30
@@ -25,27 +23,24 @@
 
 (def high-elf-traits
   (-> traits
-      (update :applicable-traits
-              (partial concat [trait/elf-weapon-training
-                               (trait/ability-score-increase stat/INT 1)]))
-      (update :features-traits (partial union #{:cantrip}))
-      (update :choosable-traits (concat [{:extra-language (set language/all)}]))))
+      (update :applicable-traits concat [trait/elf-weapon-training
+                                         (trait/ability-score-increase stat/INT 1)])
+      (update :features-traits union #{:cantrip})
+      (update :choosable-traits concat [{:extra-language (set language/all)}])))
 
 (def wood-elf-traits
   (-> traits
       (assoc :base-speed 35)  ; Fleet Footed
-      (update :applicable-traits
-              (partial concat [(trait/ability-score-increase stat/WIS 1)
-                               trait/elf-weapon-training]))
-      (update :features-traits (partial union #{:mask-of-the-wild}))))
+      (update :applicable-traits concat [(trait/ability-score-increase stat/WIS 1)
+                                         trait/elf-weapon-training])
+      (update :features-traits union #{:mask-of-the-wild})))
 
 (def dark-elf-traits
   (-> traits
-      (update :alignments #(difference % #{alignment/good}))
-      (update :alignments #(union % #{alignment/evil}))
-      (update :applicable-traits
-              (partial concat [(trait/ability-score-increase stat/CHA 1)
-                               trait/drow-weapon-training]))
-      (update :features-traits (partial union #{:superior-darkvision
-                                                :sunlight-sensitivity
-                                                :drow-magic}))))
+      (update :alignments difference #{alignment/good})
+      (update :alignments union #{alignment/evil})
+      (update :applicable-traits concat [(trait/ability-score-increase stat/CHA 1)
+                                         trait/drow-weapon-training])
+      (update :features-traits union #{:superior-darkvision
+                                       :sunlight-sensitivity
+                                       :drow-magic})))

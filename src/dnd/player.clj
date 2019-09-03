@@ -1,28 +1,14 @@
 (ns dnd.player
-  (:require [dnd.race :as race]
-            [dnd.stat :as stat]
+  (:require [dnd.stat :as stat]
             [dnd.util :as util]))
-
-(def example-player
-  {:level 1
-   :experience 0
-   :proficiency-bonus +2
-   :ability-scores {stat/CHA 1
-                    stat/CON 2
-                    stat/DEX 3
-                    stat/INT 4
-                    stat/STR 5
-                    stat/WIS 6}
-   ;; TODO: split proficiencies into categories?
-   :proficiencies []
-   :race race/hill-dwarf
-   :base-speed 25
-   :size :medium
-   :features-and-traits #{:darkvision}
-   })
 
 (def blank-slate
   {:level 1
+   ;; race
+   ;; size
+   ;; base-speeed
+   ;; features-traits
+   ;; choosable-traits
    :experience 0
    :proficiency-bonus 2
    :languages #{}})

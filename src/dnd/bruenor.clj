@@ -1,7 +1,10 @@
 (ns dnd.bruenor
-  (:require [clojure.string :as str]))
-
-(def bruenor (atom {}))
+  (:require [clojure.string :as str]
+            [dnd.player :as player]
+            [dnd.stat :as stat]
+            [dnd.trait :as trait]
+            [dnd.race :as race]
+            [dnd.race.dwarf :as dwarf]))
 
 ;;; step 1, Choose a race
 (def race :todo)
@@ -12,8 +15,20 @@
 (def class :todo)
 
 ;;; Step 3: Determine ability scores
-(def stat-priority [stats/STR stat/CON stat/WIS stat/CHA stat/DEX str/INT])
+(def stat-priority [stat/STR stat/CON stat/WIS stat/CHA stat/DEX stat/INT])
 
-(let [bruenor {}
-      b-with-stats (player/apply-standard-scores bruenor)]
-  b-with-stats)
+(defn apply-racial-traits [player traits]
+  (if (not (:subrace player))
+    (-> player
+        (merge (select-keys traits
+                            [:race :subrace :size :base-speed :languages
+                             :feature-traits :choosable-traits]))
+        (trait/apply-all (:applicable-traits traits)))
+    player))
+
+(def bruenor
+  (-> player/blank-slate
+      (stat/apply-standard-scores stat-priority)
+      (race/with-race race/dark-elf)))
+
+(clojure.pprint/pprint bruenor)

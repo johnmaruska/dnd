@@ -1,8 +1,16 @@
 (ns dnd.trait
   (:require [clojure.set :refer [union]]
             [dnd.armor :as armor]
+            [dnd.skill :as skill]
             [dnd.stat :refer [increase-ability-score]]
             [dnd.weapon :as weapon]))
+
+(defn apply-single-trait [player trait]
+  (let [trait-fn (nth (first trait) 1)]
+    (trait-fn player)))
+
+(defn apply-all [player traits]
+  (reduce apply-single-trait player traits))
 
 ;; TODO: Brave (Halfling, PHB p28)
 ;; TODO: Cantrip (Elf, PHB p24)
@@ -22,33 +30,42 @@
 ;; TODO: Trance (Elf, PHB p23)
 ;; TODO: Naturally stealthy
 
+;;; Dragonborn
+
+;; Gnome - PHB 35-37
+;; TODO: natural illusionist
+;; TODO: speak with small beasts
+
 (defn ability-score-increase [ability amount]
   {:ability-score-increase #(increase-ability-score % ability amount)})
 
 (def drow-weapon-training
-  (let [add-proficiencies (partial union #{weapon/rapier
-                                           weapon/shortsword
-                                           weapon/hand-crossbow})]
-    {:drow-weapon-training #(update % :proficiencies add-proficiencies)}))
+  (let [proficiencies #{weapon/rapier
+                        weapon/shortsword
+                        weapon/hand-crossbow}]
+    {:drow-weapon-training #(update % :proficiencies union proficiencies)}))
 
 (def dwarven-combat-training
-  (let [add-proficiencies (partial union #{weapon/battleaxe
-                                           weapon/handaxe
-                                           weapon/throwing-hammer
-                                           weapon/warhammer})]
-    {:dwarven-combat-training #(update % :proficiencies add-proficiencies)}))
+  (let [proficiencies #{weapon/battleaxe
+                        weapon/handaxe
+                        weapon/throwing-hammer
+                        weapon/warhammer}]
+    {:dwarven-combat-training #(update % :proficiencies union proficiencies)}))
 
 (def dwarven-armor-training
-  (let [add-proficiencies (partial union #{armor/light armor/medium})]
-    {:dwarven-armor-training #(update % :proficiencies add-proficiencies)}))
+  (let [proficiencies #{armor/light armor/medium}]
+    {:dwarven-armor-training #(update % :proficiencies union proficiencies)}))
 
 (def elf-weapon-training
-  (let [add-proficiencies (partial union #{weapon/longsword
-                                           weapon/shortsword
-                                           weapon/shortbow
-                                           weapon/longbow})]
-    {:elf-weapon-training #(update % :proficiencies add-proficiencies)}))
+  (let [proficiencies #{weapon/longsword
+                        weapon/shortsword
+                        weapon/shortbow
+                        weapon/longbow}]
+    {:elf-weapon-training #(update % :proficiencies union proficiencies)}))
 
 (def keen-senses
-  {:keen-senses #(update % :proficiencies
-                         (partial union #{skill/perception}))})
+  {:keen-senses #(update % :proficiencies union #{skill/perception})})
+
+(def tinker
+  ;; TODO: tinker has way more stuff, PHB p37
+  {:tinker #(update % :proficiencies union #{:tinkers-tools})})
