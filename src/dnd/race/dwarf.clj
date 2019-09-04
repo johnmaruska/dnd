@@ -16,7 +16,6 @@
                                            :brewers-supplies
                                            :masons-tools}}]
    :features-traits #{:darkvision :dwarven-resilience :stonecunning}
-   :height {:short 4 :tall 5}
    :languages #{language/common language/dwarvish}
    :size :medium
    :weight {:average 150}
@@ -24,14 +23,16 @@
 
 (def hill-dwarf-traits
   (-> traits
-      (assoc :subrace :hill-dwarf)
-      (update :features-traits (partial union #{:dwarven-toughness}))
-      (update :applicable-traits
-              (partial cons (trait/ability-score-increase stat/WIS 1)))))
+      (assoc :subrace :hill-dwarf
+             :height {:base {:feet 3 :inches 8} :modifier {:d4 2}}
+             :weight {:base 115 :modifier {:d6 2}})
+      (update :features-traits union #{:dwarven-toughness})
+      (update :applicable-traits cons (trait/ability-score-increase stat/WIS 1))))
 
 (def mountain-dwarf-traits
   (-> traits
-      (assoc :subrace :mountain-dwarf)
-      (update :applicable-traits
-              (partial concat [trait/dwarven-armor-training
-                               (trait/ability-score-increase stat/STR 2)]))))
+      (assoc :subrace :mountain-dwarf
+             :height {:base {:feet 4 :inches 0} :modifier {:d4 2}}
+             :weight {:base 130 :modifier {:d6 2}})
+      (update :applicable-traits concat [trait/dwarven-armor-training
+                                         (trait/ability-score-increase stat/STR 2)])))

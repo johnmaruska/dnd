@@ -10,7 +10,8 @@
 (def traits
   {:age {:maturity 18 :lifespan 90}
    :alignments alignment/all
-   :height {:short 5 :tall 6}
+   :height {:base {:feet 4 :inches 8} :modifier {:d10 2}}
+   :weight {:base 110 :modifier {:d4 2}}
    :size :medium
    :base-speed 30
    :languages #{language/common}
@@ -20,19 +21,16 @@
 (def variant-traits-ability-score
   (-> traits
       (dissoc :applicable-traits)
-      (update :choosable-traits
-              (partial concat [{:ability-score-increase stat/all}
-                               {:ability-score-increase stat/all}]))))
+      (update :choosable-traits concat [{:ability-score-increase stat/all}
+                                        {:ability-score-increase stat/all}])))
 
 (def variant-traits-skills
   (-> traits
       (dissoc :applicable-traits)
-      (update :choosable-traits
-              (partial concat [{:proficiency skill/all}
-                               {:proficiency skill/all}]))))
+      (update :choosable-traits concat [{:proficiency skill/all}
+                                        {:proficiency skill/all}])))
 
 (def variant-trait-feat
   (-> traits
       (dissoc :applicable-traits)
-      (update :choosable-traits
-              (conj {:feat feat/all}))))
+      (update :choosable-traits conj {:feat feat/all})))

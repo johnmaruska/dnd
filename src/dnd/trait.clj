@@ -12,29 +12,48 @@
 (defn apply-all [player traits]
   (reduce apply-single-trait player traits))
 
-;; TODO: Brave (Halfling, PHB p28)
-;; TODO: Cantrip (Elf, PHB p24)
-;; TODO: Darkvision (Elf, PHB p23), (Dwarf, PHB p20)
-;; TODO: Drow Magic (Elf, PHB p24)
-;; TODO: Dwarven Resilience (Dwarf, PHB p20)
-;; TODO: Dwarven Toughness (Dwarf, PHB p20)
-;; TODO: Extra Language (Elf, Phb 24)
-;; TODO: Fey Ancestry (Elf, PHB p23)
-;; TODO: Halfling Nimbleness (halfling, PHB p28)
-;; TODO: Lucky (Halfling, PHB p28)
-;; TODO: Mask of the Wild (Elf, PHB p24)
-;; TODO: Stonecunning (Dwarf, PHB p20)
-;; TODO: Sunlight Sensitivity (Elf, PHB p24)
-;; TODO: Superior Darkvision (Elf, PHB p24)
-;; TODO: Tool Proficiency (Dwarf, PHB p20)
-;; TODO: Trance (Elf, PHB p23)
-;; TODO: Naturally stealthy
+;;; Dwarf - PHB 18-20
+;; TODO: Darkvision
+;; TODO: Dwarven Resilience
+;; TODO: Stonecunning
+;; TODO: Dwarven Toughness
 
-;;; Dragonborn
+;; Elf - PHB 21-24
+;; TODO: Darkvision
+;; TODO: Mask of the Wild
+;; TODO: Fey Ancestry
+;; TODO: Trance
+;; TODO: Superior Darkvision
+;; TODO: Sunlight Sensitivity
+;; TODO: Drow Magic
+;; TODO: Cantrip
+
+;;; Halfling - PHB 26-28
+;; TODO: Halfling Nimbleness
+;; TODO: Brave
+;; TODO: Lucky
+;; TODO: Naturally Stealthy
+;; TODO: Stout Resilience
+
+;;; Dragonborn - PHB 32-34
+;; TODO: Breath Weapon (based on draconic ancestry)
+;; TODO: Damage Resistance (based on draconic ancestry)
 
 ;; Gnome - PHB 35-37
-;; TODO: natural illusionist
-;; TODO: speak with small beasts
+;; TODO: Darkvision
+;; TODO: Gnome Cunning
+;; TODO: Artificer's Lore
+;; TODO: Tinker
+;; TODO: Natural Illusionist
+;; TODO: Speak with Small Beasts
+
+;;; Half-Orc - PHB 40-21
+;; TODO: Relentless Endurance
+;; TODO: Savage Attacks
+
+;;; Tiefling - PHB 42-43
+;; TODO: Hellish Resistance
+;; TODO: Infernal Legacy
 
 (defn ability-score-increase [ability amount]
   {:ability-score-increase #(increase-ability-score % ability amount)})
@@ -63,8 +82,14 @@
                         weapon/longbow}]
     {:elf-weapon-training #(update % :proficiencies union proficiencies)}))
 
+(def fleet-of-foot
+  {:fleet-of-foot #(update % :base-speed (partial max 35))})
+
 (def keen-senses
   {:keen-senses #(update % :proficiencies union #{skill/perception})})
+
+(def menacing
+  {:menacing #(update % :proficiencies union #{skill/intimidation})})
 
 (def tinker
   ;; TODO: tinker has way more stuff, PHB p37

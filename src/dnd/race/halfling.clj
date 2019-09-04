@@ -10,15 +10,18 @@
    :base-speed 25
    :choosable-traits []
    :features-traits #{:lucky :brave :halfling-nimbleness}
-   :height {:short 3 :tall 3}
+   :height {:base {:feet 2 :inches 7} :modifier {:d4 2}}
    :languages #{language/common language/halfling}
    :size :small
-   :weight {:average 40}
+   :weight {:base 35 :modifier nil}
    :race :halfling})
 
 (def lightfoot-halfling-traits
   (-> traits
-      (update :applicable-traits
-              (partial cons (trait/ability-score-increase stat/CHA 2)))
-      (update :feature-traits
-              (partial cons :naturally-stealthy))))
+      (update :applicable-traits cons (trait/ability-score-increase stat/CHA 2))
+      (update :feature-traits cons :naturally-stealthy)))
+
+(def stout-halfling-traits
+  (-> traits
+      (update :applicable-traits cons (trait/ability-score-increase stat/CON 1))
+      (update :feature-traits cons :stout-resilience)))
