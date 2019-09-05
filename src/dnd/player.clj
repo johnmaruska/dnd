@@ -21,18 +21,19 @@
   (set-level player (inc (:level player))))
 
 ;; Player's Handbook Ch1.3 page 13
-(defn get-ability-modifier
+(defn- get-ability-modifier
   "Retrieve derived trait "
   [player ability]
   ;; magic numbers derived from tables provided in PHB
   (-> (get-in player [:ability-scores ability])
       (- 10)
       (util/div 2)))
-
-;; Player's Handbook Ch1.5 page 14
-(defn armor-class [player]
-  ;; TODO: more rules later
-  (+ 10 (get-ability-modifier player stat/DEX)))
+(defn cha-modifier [player] (get-ability-modifier player stat/CHA))
+(defn con-modifier [player] (get-ability-modifier player stat/CON))
+(defn dex-modifier [player] (get-ability-modifier player stat/DEX))
+(defn int-modifier [player] (get-ability-modifier player stat/INT))
+(defn str-modifier [player] (get-ability-modifier player stat/STR))
+(defn wis-modifier [player] (get-ability-modifier player stat/WIS))
 
 (defn proficiency-bonus [player]
   ;; magic numbers derived from tables provided in PHB

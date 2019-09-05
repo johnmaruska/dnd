@@ -33,18 +33,18 @@
   [player weapon]
   {:pre [(= :melee (:type weapon))]}
   (if (finesse? weapon)
-    (max [(player/get-ability-modifier player stat/DEX)
-          (player/get-ability-modifier player stat/STR)])
-    (player/get-ability-modifier player stat/STR)))
+    (max [(player/dex-modifier player)
+          (player/str-modifier player)])
+    (player/str-modifier player)))
 
 ;; Player's Handbook Ch1.5 page 14
 (defn ranged-bonus
   [player weapon]
   {:pre [(= :ranged (:type weapon))]}
   (if (thrown? weapon)
-    (max [(player/get-ability-modifier player stat/DEX)
-          (player/get-ability-modifier player stat/STR)])
-    (player/get-ability-modifier player stat/DEX)))
+    (max [(player/dex-modifier player)
+          (player/str-modifier player)])
+    (player/dex-modifier player)))
 
 ;; Player's Handbook Ch1.5 page 14
 (defn attack [player weapon]
