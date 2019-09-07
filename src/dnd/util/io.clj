@@ -29,7 +29,7 @@
   `(retry-choice-thunk (fn [] ~@body)))
 
 (defn- parse-numeral-choice [input total-choices]
-  (let [choice (Integer/parseInt line)]
+  (let [choice (Integer/parseInt input)]
     (if (not (< 0 choice (+ 1 total-choices)))
       (throw (IllegalArgumentException. "invalid choice input"))
       choice)))
@@ -45,8 +45,8 @@
    (with-bad-choice-reattempts
      (let [choice (if (= style :alphabetical)
                     (parse-alphabetical-choice (read-line) (count choices))
-                    (parse-numeral-choice (read-line) (count choices)))])
-     (nth choices (- choice 1))))
+                    (parse-numeral-choice (read-line) (count choices)))]
+       (nth choices (- choice 1)))))
   ([choices]
    (get-user-choice :numeral choices)))
 
