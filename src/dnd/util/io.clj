@@ -28,32 +28,27 @@
 (defmacro with-bad-choice-reattempts [& body]
   `(retry-choice-thunk (fn [] ~@body)))
 
-(defn- read-numeral-choice
-  "Read a single numerical choice from the user."
-  [total-choices]
-  (with-bad-choice-reattempts
-    (let [choice (Integer/parseInt (read-line))]
-      (if (not (< 0 choice (+ 1 total-choices)))
-        (throw (IllegalArgumentException. "invalid choice input"))
-        choice))))
+(defn- parse-numeral-choice [input total-choices]
+  (let [choice (Integer/parseInt line)]
+    (if (not (< 0 choice (+ 1 total-choices)))
+      (throw (IllegalArgumentException. "invalid choice input"))
+      choice)))
 
-(defn- read-alphabetical-choice
-  "Read a single alphabetical choice from the user."
-  [total-choices]
-  (with-bad-choice-reattempts
-    (let [choice (-> (read-line) clojure.string/lower-case first int (- 96))]
-      (if (not (< 0 choice (+ 1 total-choices)))
-        (throw (IllegalArgumentException. "invalid choice input"))
-        choice))))
+(defn- parse-alphabetical-choice [input total-choices]
+  (let [choice (-> input clojure.string/lower-case first int (- 96))]
+    (if (not (< 0 choice (+ 1 total-choices)))
+      (throw (IllegalArgumentException. "invalid choice input"))
+      choice)))
 
-(defn- read-choice
+(defn- get-user-choice
   ([style choices]
    (with-bad-choice-reattempts
-     (if (= style :alphabetical)
-       (read-alphabetical-choice (count choices))
-       (read-numeral-choice (count choices)))))
+     (let [choice (if (= style :alphabetical)
+                    (parse-alphabetical-choice (read-line) (count choices))
+                    (parse-numeral-choice (read-line) (count choices)))])
+     (nth choices (- choice 1))))
   ([choices]
-   (read-choice :numeral choices)))
+   (get-user-choice :numeral choices)))
 
 
 (defn prompt-user
@@ -70,7 +65,6 @@
    (println preamble)
    (print (display-choices style choices))
    (print (format "\n\n%s: " postamble))
-   (let [selected-number (read-choice style choices)]
-     (nth choices (- selected-number 1))))
+   (get-user-choice style choices))
   ([preamble choices postamble]
    (prompt-user :numeral preamble choices postamble)))
