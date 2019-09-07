@@ -14,9 +14,9 @@
    :alignments #{alignment/chaotic alignment/good}
    :base-speed 30
    :languages #{language/common language/elvish}
-   :features-traits #{:darkvision
-                      :fey-ancestry
-                      :trance}
+   :feature-traits #{:darkvision
+                     :fey-ancestry
+                     :trance}
    :applicable-traits [(trait/ability-score-increase stat/DEX 2)
                        trait/keen-senses]
    :choosable-traits []})
@@ -28,7 +28,7 @@
              :weight {:base 90 :modifier {:d4 1}})
       (update :applicable-traits concat [trait/elf-weapon-training
                                          (trait/ability-score-increase stat/INT 1)])
-      (update :features-traits union #{:cantrip})
+      (update :feature-traits union #{:cantrip})
       (update :choosable-traits concat [{:extra-language (set language/all)}])))
 
 (def wood-elf-traits
@@ -39,7 +39,7 @@
       (update :applicable-traits concat [(trait/ability-score-increase stat/WIS 1)
                                          trait/elf-weapon-training
                                          trait/fleet-of-foot])
-      (update :features-traits union #{:mask-of-the-wild})))
+      (update :feature-traits union #{:mask-of-the-wild})))
 
 (def dark-elf-traits
   (-> traits
@@ -50,6 +50,6 @@
       (update :alignments union #{alignment/evil})
       (update :applicable-traits concat [(trait/ability-score-increase stat/CHA 1)
                                          trait/drow-weapon-training])
-      (update :features-traits union #{:superior-darkvision
-                                       :sunlight-sensitivity
-                                       :drow-magic})))
+      (update :feature-traits union #{:superior-darkvision
+                                      :sunlight-sensitivity
+                                      :drow-magic})))

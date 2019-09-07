@@ -14,7 +14,7 @@
 (def standard-scores [15 14 13 12 10 8])
 
 (defn + [& args]
-  (min 30 (apply core-add args)))
+  (min 30 (or (apply core-add args) 0)))
 (defn inc [n]
   (min 30 (core-inc n)))
 

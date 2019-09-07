@@ -1,7 +1,7 @@
 (ns dnd.core
   (:require
    [clojure.set :refer [difference]]
-   [clojure.pprint :refer [pprint]]
+   [clojure.pprint :as pprint]
    [dnd.player :as player]
    [dnd.race :as race]
    [dnd.stat :as stat]
@@ -11,25 +11,16 @@
 (defn prompt-for-race []
   (io/prompt-user "Select one of the following races for your race:"
                   (vec race/all)
-                  "Which race would your like your character to be?"))
-
-(defn prompt-for-next-stat [current-priority-order remaining-options]
-  (io/prompt-user (str "Your current priority order from highest to lowest is "
-                       current-priority-order
-                       "\n\nRemaining ability scores are:")
-                  (vec remaining-options)
-                  "What stat is next?"
-                  :style :alphabetical))
+                  "Which race would your like your character to be?"
+                  :style :alphabetical
+                  :type :single))
 
 (defn prompt-for-stat-priority []
-  (println "Time to pick ability scores! What priority order - highest first, would you like?")
-  (loop [curr-prio []
-         rem-stats (set stat/all)]
-    (if (= rem-stats #{})
-      curr-prio
-      (let [next-stat (prompt-for-next-stat curr-prio rem-stats)]
-        (recur (conj curr-prio next-stat)
-               (difference rem-stats #{next-stat}))))))
+  (io/prompt-user "Time to pick ability scores! What priority order would you like?"
+                  stat/all
+                  "Enter desired priority order, highest to lowest stat, <SPACE> separated"
+                  :style :alphabetical
+                  :type :order))
 
 (defn -main
   "I don't do a whole lot ... yet."
@@ -37,7 +28,7 @@
   (println "Welcome to D&D!")
   (let [stat-prio   (prompt-for-stat-priority)
         chosen-race (prompt-for-race)]
-    (pprint
+    (pprint/pprint
      (-> player/blank-slate
          (stat/with-standard-scores stat-prio)
          (race/with-race chosen-race)))))

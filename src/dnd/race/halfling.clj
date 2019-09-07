@@ -12,7 +12,7 @@
    :applicable-traits [(trait/ability-score-increase stat/DEX 2)]
    :base-speed 25
    :choosable-traits []
-   :features-traits #{:lucky :brave :halfling-nimbleness}
+   :feature-traits #{:lucky :brave :halfling-nimbleness}
    :height {:base {:feet 2 :inches 7} :modifier {:d4 2}}
    :languages #{language/common language/halfling}
    :size :small

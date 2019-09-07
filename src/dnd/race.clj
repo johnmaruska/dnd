@@ -75,7 +75,7 @@
   (if (not (:subrace player))
     (-> player
         (merge (select-keys traits [:race :size :subrace :base-speed :languages
-                                    :features-traits :choosable-traits]))
+                                    :feature-traits :choosable-traits]))
         (trait/apply-all (:applicable-traits traits)))
     player))
 

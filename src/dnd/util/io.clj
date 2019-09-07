@@ -52,7 +52,10 @@
   (let [parse-fn (if (= style :alphabetical)
                    (partial parse-alphabetical-choice (count choices))
                    (partial parse-numeral-choice (count choices)))]
-    (map parse-fn (clojure.string/split input #" "))))
+    (->> (clojure.string/split input #" ")
+         (map parse-fn)
+         (map #(nth choices (- % 1)))
+         vec)))
 
 (defn- parse-order-choice
   [style choices input]
@@ -106,4 +109,6 @@
   (println preamble)
   (print (display-choices style choices))
   (print (format "\n\n%s: " postamble))
-  (get-choice! type style choices))
+  (let [choice (get-choice! type style choices)]
+    (println "")
+    choice))
