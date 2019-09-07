@@ -22,6 +22,16 @@
                   :style :alphabetical
                   :type :order))
 
+(defn prompt-for-choosable-trait [trait]
+  (io/prompt-user (format "Your character has a choosable trait %s. Which option would you like?" (:name trait))
+                  (:options trait)
+                  "Which option would you like to choose?"
+                  :style :alphabetical
+                  :type :single))
+
+(defn prompt-and-add-choosable-trait [player trait]
+  ((:apply trait) player (prompt-for-choosable-trait trait)))
+
 (defn -main
   "I don't do a whole lot ... yet."
   [& _args]

@@ -3,7 +3,8 @@
             [dnd.alignment :as alignment]
             [dnd.language :as language]
             [dnd.stat :as stat]
-            [dnd.trait :as trait]))
+            [dnd.trait :as trait]
+            [clojure.java.io :as io]))
 
 ;; Player's Handbook Ch2 - Dwarf page 20
 (def ^:private traits
@@ -12,9 +13,9 @@
    :applicable-traits [trait/dwarven-combat-training
                        (trait/ability-score-increase stat/CON 2)]
    :base-speed 25  ;; TODO: not reduced by heavy armor
-   :choosable-traits [{:tool-proficiency #{:smiths-tools
-                                           :brewers-supplies
-                                           :masons-tools}}]
+   :choosable-traits [(trait/tool-proficiency [:smiths-tools
+                                               :brewers-supplies
+                                               :masons-tools])]
    :feature-traits #{:darkvision :dwarven-resilience :stonecunning}
    :languages #{language/common language/dwarvish}
    :size :medium

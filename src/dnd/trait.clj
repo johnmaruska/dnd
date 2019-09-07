@@ -56,8 +56,8 @@
 ;; TODO: Hellish Resistance
 ;; TODO: Infernal Legacy
 
-(defn ability-score-increase [ability amount]
-  {:ability-score-increase #(increase-ability-score % ability amount)})
+(defn ability-score-increase [ability amount & {:keys [max]}]
+  {:ability-score-increase #(increase-ability-score % ability amount :max max)})
 
 (def drow-weapon-training
   (let [proficiencies #{weapon/rapier
@@ -95,3 +95,42 @@
 (def tinker
   ;; TODO: tinker has way more stuff, PHB p37
   {:tinker #(update % :proficiencies union #{:tinkers-tools})})
+
+;;;; Choosable Traits - TODO: move to own namespace
+
+(defn add-proficiency [player type proficiency]
+  (update-in player [:proficiencies type] union #{proficiency}))
+
+(defn add-language [player proficiency]
+  (update player :languages union #{proficiency}))
+
+(defn tool-proficiency [options]
+  {:name    :tool-proficiency
+   ;; TODO: define tool-and-kit proficiencies
+   :options (vec options)
+   :apply   #(add-proficiency %1 :tools-and-kits %2)})
+
+(defn choosable->applicable [choosable choice]
+  {(:name choosable) #((:apply choosable) %1 choice)})
+
+(def extra-language
+  {:name       :extra-language
+   :options    language/all
+   :applicable #(update %1 :languages union #{%2})})
+
+(defn ability-score-increase
+  ([options & {:keys [max]}]
+   {:name       :ability-score-increase
+    :options    (vec options)
+    :applicable #(applicable/ability-score-increase %1 %2 1 :max max)})
+  ([] (ability-score-increase stat/all)))
+
+(def skill-versatility
+  {:name       :skill-versatility
+   :options    skill/all
+   :applicable #(add-proficiency %1 :skill %2)})
+
+(def extra-feat
+  {:name :extra-feat
+   :options feat/all
+   :applicable #(update-in %1 :feats union #{%2})})

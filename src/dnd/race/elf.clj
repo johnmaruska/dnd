@@ -29,7 +29,7 @@
       (update :applicable-traits concat [trait/elf-weapon-training
                                          (trait/ability-score-increase stat/INT 1)])
       (update :feature-traits union #{:cantrip})
-      (update :choosable-traits concat [{:extra-language (set language/all)}])))
+      (update :choosable-traits conj trait/extra-language)))
 
 (def wood-elf-traits
   (-> traits
