@@ -28,28 +28,67 @@
 (defmacro with-bad-choice-reattempts [& body]
   `(retry-choice-thunk (fn [] ~@body)))
 
-(defn- parse-numeral-choice [input total-choices]
+(defn- parse-numeral-choice [total-choices input]
   (let [choice (Integer/parseInt input)]
     (if (not (< 0 choice (+ 1 total-choices)))
       (throw (IllegalArgumentException. "invalid choice input"))
       choice)))
 
-(defn- parse-alphabetical-choice [input total-choices]
+(defn- parse-alphabetical-choice [total-choices input]
   (let [choice (-> input clojure.string/lower-case first int (- 96))]
     (if (not (< 0 choice (+ 1 total-choices)))
       (throw (IllegalArgumentException. "invalid choice input"))
       choice)))
 
-(defn- get-user-choice
-  ([style choices]
-   (with-bad-choice-reattempts
-     (let [choice (if (= style :alphabetical)
-                    (parse-alphabetical-choice (read-line) (count choices))
-                    (parse-numeral-choice (read-line) (count choices)))]
-       (nth choices (- choice 1)))))
-  ([choices]
-   (get-user-choice :numeral choices)))
+(defn- parse-single-choice
+  [style choices input]
+  (let [choice (if (= style :alphabetical)
+                 (parse-alphabetical-choice (count choices) input)
+                 (parse-numeral-choice (count choices) input))]
+    (nth choices (- choice 1))))
 
+(defn- parse-multiple-choices
+  [style choices input]
+  (let [parse-fn (if (= style :alphabetical)
+                   (partial parse-alphabetical-choice (count choices))
+                   (partial parse-numeral-choice (count choices)))]
+    (map parse-fn (clojure.string/split input #" "))))
+
+(defn- parse-order-choice
+  [style choices input]
+  (let [chosen-order (parse-multiple-choices style choices input)
+        all-used? (= (count choices) (count (set chosen-order)))
+        no-dupes? (= (count chosen-order) (count (set chosen-order)))]
+    (if (and all-used? no-dupes?)
+      chosen-order
+      (throw (IllegalArgumentException. "must use all options once")))))
+
+(defn- parse-n-subset-choice
+  [n style choices input]
+  (let [chosen-subset (parse-multiple-choices style choices input)
+        n-choices? (= n (count chosen-subset))
+        no-dupes? (= n (count (set chosen-subset)))]
+    (if (and n-choices? no-dupes?)
+      chosen-subset
+      (throw (IllegalArgumentException. (str "must use " n " different choices"))))))
+
+(defn retrieve-choice! [parse-fn style choices]
+  (with-bad-choice-reattempts
+    (parse-fn style choices (read-line))))
+
+(defn get-choice!
+  "Get user input of their choice of a given set of `choices`. The `choice-type`
+  must be one of `single` (one item from the set) `order` (order all items in
+  the set) or `subset` "
+  ([choice-type style choices]
+   (let [parse-fn (case choice-type
+                    :single   parse-single-choice
+                    :order    parse-order-choice
+                    :multiple parse-multiple-choices)]
+     (retrieve-choice! parse-fn style choices)))
+  ([choice-type n style choices]
+   {:pre [(= :subset choice-type)]}
+   (retrieve-choice! (partial parse-n-subset-choice n) style choices)))
 
 (defn prompt-user
   "Prompt the user for their selection from a collection of choices.
@@ -61,10 +100,10 @@
   `preamble` and `postamble` must both be strings
   `choices` must be an indexable sequence (`nth` function)
   optional `style` may be :numeral or :alphabetical"
-  ([style preamble choices postamble]
-   (println preamble)
-   (print (display-choices style choices))
-   (print (format "\n\n%s: " postamble))
-   (get-user-choice style choices))
-  ([preamble choices postamble]
-   (prompt-user :numeral preamble choices postamble)))
+  [preamble choices postamble & {:keys [style type]
+                                 :or {style :numeral
+                                      type :single}}]
+  (println preamble)
+  (print (display-choices style choices))
+  (print (format "\n\n%s: " postamble))
+  (get-choice! type style choices))

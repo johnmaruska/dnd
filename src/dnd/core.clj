@@ -14,12 +14,12 @@
                   "Which race would your like your character to be?"))
 
 (defn prompt-for-next-stat [current-priority-order remaining-options]
-  (io/prompt-user :alphabetical
-                  (str "Your current priority order from highest to lowest is "
+  (io/prompt-user (str "Your current priority order from highest to lowest is "
                        current-priority-order
                        "\n\nRemaining ability scores are:")
                   (vec remaining-options)
-                  "What stat is next?"))
+                  "What stat is next?"
+                  :style :alphabetical))
 
 (defn prompt-for-stat-priority []
   (println "Time to pick ability scores! What priority order - highest first, would you like?")
