@@ -5,8 +5,9 @@
             [dnd.trait :as trait]
             [dnd.stat :as stat]))
 
-(def ^:private traits
-  {:age {:maturity 15 :lifespan 80}
+(def traits
+  {:race :dragonborn
+   :age {:maturity 15 :lifespan 80}
    :alignment [alignment/good alignment/evil]
    :applicable-traits [(trait/ability-score-increase stat/STR 2)
                        (trait/ability-score-increase stat/CHA 1)]

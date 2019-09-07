@@ -11,6 +11,8 @@
 (def WIS :wisdom)
 (def all [CHA CON DEX INT STR WIS])
 
+(def standard-scores [15 14 13 12 10 8])
+
 (defn + [& args]
   (min 30 (apply core-add args)))
 (defn inc [n]
@@ -23,7 +25,7 @@
 
 ;; TODO: ability score point cost
 ;; Player's Handbook Ch1.3 page 13
-(defn apply-custom-scores
+(defn with-custom-scores
   "If a character has no ability scores, apply custom scores as provided."
   ([player custom-stats]
    {:pre [(map? custom-stats)
@@ -36,16 +38,16 @@
           (= 6 (count stat-prio-order))]}
    (->> (map vector stat-prio-order stat-vals)
         (into {})
-        (apply-custom-scores player))))
+        (with-custom-scores player))))
 
 ;; Player's Handbook Ch1.3 page 13
-(defn apply-standard-scores
+(defn with-standard-scores
   "If a character has no ability scores, apply standard scores in priority order."
   [player stat-prio-order]
   {:pre [(= 6 (count stat-prio-order))]}
-  (apply-custom-scores player stat-prio-order [15 14 13 12 10 8]))
+  (with-custom-scores player stat-prio-order standard-scores))
 
-(defn apply-random-scores
+(defn with-random-scores
   [player stat-prio-order]
   {:pre [(= 6 (count stat-prio-order))]}
   (let [roll-stat (fn [] (->> (repeatedly 4 #(dice/roll :d6))
@@ -54,4 +56,4 @@
                               (reduce +)))]
     (->> (repeatedly 6 roll-stat)
          (sort >)
-         (apply-custom-scores player stat-prio-order))))
+         (with-custom-scores player stat-prio-order))))

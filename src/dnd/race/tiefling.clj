@@ -1,13 +1,19 @@
-(ns dnd.race.tiefling)
+(ns dnd.race.tiefling
+  (:require
+   [dnd.alignment :as alignment]
+   [dnd.language :as language]
+   [dnd.stat :as stat]
+   [dnd.trait :as trait]))
 
 (def traits
-  {:age {:maturity 18 :lifespan 100}
+  {:race :tiefling
+   :age {:maturity 18 :lifespan 100}
    :applicable-traits [(trait/ability-score-increase stat/INT 1)
                        (trait/ability-score-increase stat/CHA 2)]
    :alignment [alignment/chaotic alignment/evil alignment/neutral]
    :size :medium
    :height {:base {:feet 4 :inches 9} :modifier {:d8 2}}
-   :weight {:base {110 :modifier {:d4 2}}}
+   :weight {:base 110 :modifier {:d4 2}}
    :base-speed 30
    :feature-traits #{:darkvision :hellish-resistance :infernal-legacy}
    :languages #{language/common language/infernal}})

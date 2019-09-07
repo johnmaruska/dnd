@@ -1,4 +1,5 @@
-(ns dnd.armor)
+(ns dnd.armor
+  (:require [dnd.player :as player]))
 
 ;; Player's Handbook p144-146
 

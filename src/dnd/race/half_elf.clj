@@ -1,11 +1,13 @@
 (ns dnd.race.half-elf
   (:require [dnd.alignment :as alignment]
             [dnd.language :as language]
+            [dnd.skill :as skill]
             [dnd.stat :as stat]
             [dnd.trait :as trait]))
 
 (def traits
-  {:age {:maturity 20 :lifespan 180}
+  {:race :half-elf
+   :age {:maturity 20 :lifespan 180}
    :alignments [alignment/chaotic alignment/good alignment/evil alignment/neutral]
    :applicable-traits [(trait/ability-score-increase stat/CHA 2)]
    :base-speed 30

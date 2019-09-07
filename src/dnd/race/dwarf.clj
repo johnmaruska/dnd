@@ -27,7 +27,7 @@
              :height {:base {:feet 3 :inches 8} :modifier {:d4 2}}
              :weight {:base 115 :modifier {:d6 2}})
       (update :features-traits union #{:dwarven-toughness})
-      (update :applicable-traits cons (trait/ability-score-increase stat/WIS 1))))
+      (update :applicable-traits conj (trait/ability-score-increase stat/WIS 1))))
 
 (def mountain-dwarf-traits
   (-> traits

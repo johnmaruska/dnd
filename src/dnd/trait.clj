@@ -1,6 +1,7 @@
 (ns dnd.trait
   (:require [clojure.set :refer [union]]
             [dnd.armor :as armor]
+            [dnd.armor.category :as armor.category]
             [dnd.skill :as skill]
             [dnd.stat :refer [increase-ability-score]]
             [dnd.weapon :as weapon]))
@@ -72,7 +73,7 @@
     {:dwarven-combat-training #(update % :proficiencies union proficiencies)}))
 
 (def dwarven-armor-training
-  (let [proficiencies #{armor/light armor/medium}]
+  (let [proficiencies #{armor.category/light armor.category/medium}]
     {:dwarven-armor-training #(update % :proficiencies union proficiencies)}))
 
 (def elf-weapon-training

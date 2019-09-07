@@ -6,7 +6,6 @@
 ;; D&D deals entirely in integers, no need to specify in name
 (def div (comp / round-towards-zero))
 
-
 ;;;; Currency
 
 (defn ->copper [amount]

@@ -1,6 +1,9 @@
 (ns dnd.race.halfling
-  (:require [dnd.stat :as stat]
-            [dnd.trait :as trait]))
+  (:require
+   [dnd.alignment :as alignment]
+   [dnd.language :as language]
+   [dnd.stat :as stat]
+   [dnd.trait :as trait]))
 
 ;; Player's Handbook Ch2 - Halfling page 26
 (def ^:private traits
@@ -18,10 +21,10 @@
 
 (def lightfoot-halfling-traits
   (-> traits
-      (update :applicable-traits cons (trait/ability-score-increase stat/CHA 2))
-      (update :feature-traits cons :naturally-stealthy)))
+      (update :applicable-traits conj (trait/ability-score-increase stat/CHA 2))
+      (update :feature-traits conj :naturally-stealthy)))
 
 (def stout-halfling-traits
   (-> traits
-      (update :applicable-traits cons (trait/ability-score-increase stat/CON 1))
-      (update :feature-traits cons :stout-resilience)))
+      (update :applicable-traits conj (trait/ability-score-increase stat/CON 1))
+      (update :feature-traits conj :stout-resilience)))

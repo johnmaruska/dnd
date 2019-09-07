@@ -1,9 +1,14 @@
 (ns dnd.race.gnome
-  (:require [dnd.stat :as stat]
-            [dnd.trait :as trait]))
+  (:require
+   [clojure.set :refer [union]]
+   [dnd.alignment :as alignment]
+   [dnd.language :as language]
+   [dnd.stat :as stat]
+   [dnd.trait :as trait]))
 
 (def ^:private traits
-  {:alignments [alignment/lawful alignment/neutral alignment/chaotic alignment/good]
+  {:race :gnome
+   :alignments [alignment/lawful alignment/neutral alignment/chaotic alignment/good]
    :applicable-traits [(trait/ability-score-increase stat/INT 2)]
    :base-speed 25
    :feature-traits #{:darkvision :gnome-cunning}
@@ -15,11 +20,13 @@
 
 (def forest-gnome-traits
   (-> traits
-      (update :applicable-traits cons (trait/ability-score-increase stat/DEX 1))
+      (assoc :subrace :forest-gnome)
+      (update :applicable-traits conj (trait/ability-score-increase stat/DEX 1))
       (update :feature-traits union #{:natural-illusionist
                                       :speak-with-small-beasts})))
 
 (def rock-gnome-traits
   (-> traits
-      (update :applicable-traits cons (trait/ability-score-increase stat/CON 1))
+      (assoc :subrace :rock-gnome)
+      (update :applicable-traits conj (trait/ability-score-increase stat/CON 1))
       (update :feature-traits union #{:artificers-lore})))

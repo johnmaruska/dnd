@@ -8,7 +8,8 @@
    [dnd.trait :as trait]))
 
 (def traits
-  {:age {:maturity 18 :lifespan 90}
+  {:race :human
+   :age {:maturity 18 :lifespan 90}
    :alignments alignment/all
    :height {:base {:feet 4 :inches 8} :modifier {:d10 2}}
    :weight {:base 110 :modifier {:d4 2}}

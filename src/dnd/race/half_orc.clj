@@ -5,7 +5,8 @@
             [dnd.trait :as trait]))
 
 (def traits
-  {:alignments [alignment/chaotic alignment/evil alignment/neutral]
+  {:race :half-orc
+   :alignments [alignment/chaotic alignment/evil alignment/neutral]
    :applicable-traits [(trait/ability-score-increase stat/STR 2)
                        (trait/ability-score-increase stat/CON 1)
                        trait/menacing]
