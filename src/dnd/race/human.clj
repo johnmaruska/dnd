@@ -28,10 +28,10 @@
 (def variant-traits-skills
   (-> traits
       (dissoc :applicable-traits)
-      (update :choosable-traits concat [{:proficiency skill/all}
-                                        {:proficiency skill/all}])))
+      (update :choosable-traits concat [{:skill-versatility skill/all}
+                                        {:skill-versatility skill/all}])))
 
 (def variant-trait-feat
   (-> traits
       (dissoc :applicable-traits)
-      (update :choosable-traits conj {:feat feat/all})))
+      (update :choosable-traits conj {:extra-feat feat/all})))

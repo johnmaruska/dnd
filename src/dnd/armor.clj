@@ -1,5 +1,7 @@
 (ns dnd.armor
-  (:require [dnd.player :as player]))
+  (:require
+   [dnd.armor.category :as armor.category]
+   [dnd.player :as player]))
 
 ;; Player's Handbook p144-146
 
@@ -8,7 +10,7 @@
 ;;       move `def shield` to `dnd.armor.shield/shield`?
 (def shield
   {:name :shield
-   :category shield
+   :category armor.category/shields
    :cost {:gold 10}
    :armor-class-bonus 2
    :weight 6})
@@ -32,3 +34,7 @@
                         base-armor-class)]
     (+ (ac-from-armor player)
        (ac-from-shield player))))
+
+(defn proficient? [player armor-category]
+  (-> (get-in player [:proficiencies :armor])
+      (contains? armor-category)))

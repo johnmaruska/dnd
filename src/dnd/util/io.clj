@@ -3,11 +3,15 @@
 
 (defn- read-line [] (flush) (core-read-line))
 
+(defn alpha-display [idx itm]
+  (format "%s. %s" (-> (+ 1 64 idx) char str) itm))
+(defn numer-display [idx itm]
+  (format "%s. %s" (+ 1 idx) itm))
 (defn- display-choices
   ([style choices]
    (let [display-choice (if (= style :alphabetical)
-                          (fn [idx itm] (format "%s. %s" (-> (+ 1 64 idx) char str) itm))
-                          (fn [idx itm] (format "%s. %s" (+ 1 idx) itm)))]
+                          alpha-display
+                          numer-display)]
      (apply str (interpose "\n" (map-indexed display-choice choices)))))
   ([choices]
    (display-choices :numeral choices)))
@@ -65,6 +69,8 @@
     (if (and all-used? no-dupes?)
       chosen-order
       (throw (IllegalArgumentException. "must use all options once")))))
+
+;; TODO: handle edge case where more choices requested than options
 
 (defn- parse-n-subset-choice
   [n style choices input]

@@ -16,8 +16,8 @@
    :don  {:q 10 :u minutes}
    :doff {:q 5 :u minutes}})
 
-(def shield
-  {:name :shield
+(def shields
+  {:name :shields
    :don  {:q 1 :u actions}
    :doff {:q 1 :u actions}})
 
