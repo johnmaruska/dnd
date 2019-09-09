@@ -20,6 +20,15 @@
 (defn level-up [player]
   (set-level player (inc (:level player))))
 
+(defn add-proficiency [player type proficiency]
+  (update-in player [:proficiencies type] union #{proficiency}))
+
+(defn add-language [player proficiency]
+  (update player :languages union #{proficiency}))
+
+(defn add-feat [player feat]
+  (update player :feats union #{feat}))
+
 ;; Player's Handbook Ch1.3 page 13
 (defn- get-ability-modifier
   "Retrieve derived trait "
@@ -40,7 +49,3 @@
   (-> (:level player)
       (util/div 4)
       (+ 2)))
-
-;; TODO: split proficiencies into categories?
-(defn proficient? [player skill]
-  (contains? (:proficiencies player) skill))

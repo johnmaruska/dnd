@@ -6,7 +6,7 @@
 ;; D&D deals entirely in integers, no need to specify in name
 (def div (comp / round-towards-zero))
 
-;;;; Currency
+;;;; Currency 
 
 (defn ->copper [amount]
   (+ (:copper amount)
@@ -35,3 +35,9 @@
 ;;;; Status signifiers
 
 (def disadvantage :disadvantage)
+
+
+;;;; Damage
+
+(def flat {:amount 1 :type :bludgeoning})
+(def rolled {:dice {:d4 1} :type :piercing})
