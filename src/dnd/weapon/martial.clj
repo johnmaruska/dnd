@@ -1,12 +1,13 @@
 (ns dnd.weapon.martial
   (:require
-   [dnd.dice :refer d4 d6 d8 d10 d12]
+   [dnd.dice :refer [d4 d6 d8 d10 d12]]
    [dnd.weapon.util :as util :refer [ammunition
                                      bludgeoning
                                      damage
                                      finesse
                                      heavy
                                      light
+                                     loading
                                      piercing
                                      reach
                                      slashing
@@ -68,7 +69,7 @@
    :properties [reach special]})
 
 (defmelee longsword
-  {:cost       {gold 15}
+  {:cost       {:gold 15}
    :damage     [1 d8 slashing]
    :weight     3
    :properties [(versatile 1 d10)]})
@@ -122,7 +123,7 @@
    :properties []})
 
 (defmelee warhammer
-  {:cost       {gold 15}
+  {:cost       {:gold 15}
    :damage     [1 d8 bludgeoning]
    :weight     2
    :properties [(versatile 1 d10)]})

@@ -1,4 +1,5 @@
-(ns dnd.weapon.util)
+(ns dnd.weapon.util
+  (:refer-clojure :exclude [range]))
 
 (def simple :simple)
 (def martial :martial)
@@ -23,6 +24,7 @@
 (def finesse :finesse)
 (def heavy :heavy)
 (def light :light)
+(def loading :loading)
 (def reach :reach)
 (def special :special)  ;; TODO: rules on PHB p148
 
@@ -35,6 +37,7 @@
    :dice {dice-type tot-dice}})
 
 (defn damage
+  ([] nil)
   ([amount damage-type]
    {:amount amount
     :type damage-type})

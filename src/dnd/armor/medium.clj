@@ -1,5 +1,5 @@
 (ns dnd.armor.medium
-  (:require [dnd.armor.category :refer medium]
+  (:require [dnd.armor.category :refer [medium]]
             [dnd.player :as player]
             [dnd.util :as util]))
 

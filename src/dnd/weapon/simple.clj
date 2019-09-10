@@ -6,6 +6,7 @@
                                      damage
                                      finesse
                                      light
+                                     loading
                                      piercing
                                      slashing
                                      thrown
