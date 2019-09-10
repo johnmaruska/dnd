@@ -1,5 +1,6 @@
 (ns dnd.armor
-  (:require [dnd.player :as player]))
+  (:require [dnd.armor.category :as category]
+            [dnd.player :as player]))
 
 ;; Player's Handbook p144-146
 
@@ -8,7 +9,7 @@
 ;;       move `def shield` to `dnd.armor.shield/shield`?
 (def shield
   {:name :shield
-   :category shield
+   :category category/shield
    :cost {:gold 10}
    :armor-class-bonus 2
    :weight 6})

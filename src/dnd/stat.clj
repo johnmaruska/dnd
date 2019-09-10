@@ -48,12 +48,15 @@
   (with-custom-scores player stat-prio-order standard-scores))
 
 (defn with-random-scores
-  [player stat-prio-order]
-  {:pre [(= 6 (count stat-prio-order))]}
-  (let [roll-stat (fn [] (->> (repeatedly 4 #(dice/roll :d6))
-                              (sort >)
-                              (take 3)
-                              (reduce +)))]
-    (->> (repeatedly 6 roll-stat)
-         (sort >)
-         (with-custom-scores player stat-prio-order))))
+  "Give a player random scores with an optional stat priority. If no priority is
+  given, random stats assigned arbitrarily (fully randomized stats)."
+  ([player] (with-random-scores player (shuffle all)))
+  ([player stat-prio-order]
+   {:pre [(= 6 (count stat-prio-order))]}
+   (let [roll-stat (fn [] (->> (repeatedly 4 #(dice/roll :d6))
+                               (sort >)
+                               (take 3)
+                               (reduce +)))]
+     (->> (repeatedly 6 roll-stat)
+          (sort >)
+          (with-custom-scores player stat-prio-order)))))
