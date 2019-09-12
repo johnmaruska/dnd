@@ -35,3 +35,9 @@
 ;;;; Status signifiers
 
 (def disadvantage :disadvantage)
+
+
+;;;; Damage
+
+(def flat {:amount 1 :type :bludgeoning})
+(def rolled {:dice {:d4 1} :type :piercing})

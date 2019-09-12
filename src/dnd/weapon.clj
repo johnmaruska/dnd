@@ -1,32 +1,24 @@
 (ns dnd.weapon
-  (:require [dnd.dice :as dice]
+  (:refer-clojure :exclusions [get])
+  (:require [clojure.set :refer [union]]
+            [dnd.dice :as dice :refer [d4 d6 d8 d10 d12]]
             [dnd.player :as player]
-            [dnd.stat :as stat]))
+            [dnd.stat :as stat]
+            [dnd.weapon.martial :as martial]
+            [dnd.weapon.simple :as simple]
+            [dnd.weapon.util :refer [finesse? thrown? melee?]]))
 
-(def example-weapon
-  {:name :sword
-   :properties [:light :finesse :thrown]
-   :type :melee})
+(def ^:private table
+  (->> (clojure.set/union martial/all simple/all)
+       (map #([(:name weapon) weapon]))
+       (into {})))
 
+(defn get [weapon-name]
+  (table weapon-name))
 
-(def battleaxe :battleaxe)
-(def hand-crossbow :hand-crossbow)
-(def handaxe :handaxe)
-(def longbow :longbow)
-(def longsword :longsword)
-(def rapier :rapier)
-(def shortbow :shortbow)
-(def shortsword :shortsword)
-(def throwing-hammer :throwing-hammer)
-(def warhammer :warhammer)
-
-(defn finesse? [weapon] (contains? (:properties weapon) :finesse))
-
-(defn thrown? [weapon] (contains? (:properties weapon) :thrown))
-
-(defn melee? [weapon] (= :melee (:type weapon)))
-
-(defn ranged? [weapon] (= :ranged (:type weapon)))
+(defn proficient? [player weapon]
+  (contains? (get-in player [:proficiencies :weapon])
+             (:name weapon)))
 
 ;; Player's Handbook Ch1.5 page 14
 (defn melee-bonus
@@ -40,7 +32,7 @@
 ;; Player's Handbook Ch1.5 page 14
 (defn ranged-bonus
   [player weapon]
-  {:pre [(= :ranged (:type weapon))]}
+  {:pre [(or (= :ranged (:type weapon)) (thrown? weapon))]}
   (if (thrown? weapon)
     (max [(player/dex-modifier player)
           (player/str-modifier player)])
@@ -50,7 +42,7 @@
 (defn attack [player weapon]
   (+ (dice/roll :d20)
      ;; TODO: extract relevant piece from weapon for proficient?
-     (if (player/proficient? player weapon)
+     (if (proficient? player weapon)
        (:proficiency-bonus player)
        0)
      (if (melee? weapon)

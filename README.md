@@ -22,15 +22,28 @@ FIXME: listing of options this app accepts.
 
 ### TODO
 
+- Change statistics to track base + various modifiers, calculate on the fly.
 - After character static generation, implement player choice for relevant traits
 
 ### Bugs
 
 ...
 
-### Any Other Sections
-### That You Think
-### Might be Useful
+### Non-standard Terminology
+
+##### Trait
+
+Taken from Racial section but extrapolated out to be any named bonus which must
+later be applied. Traits are separated into categories - applicable (static
+increases), choosable (requires player input), and feature (typically declared
+action, not a number or entry on character sheet).
+
+
+##### Feature (Trait)
+
+Not to be confused with Feat. A feature / feature trait is a trait which can be
+exercised only under certain situations either as a reaction to a situation or
+as declared by the player. Feats are as described in the book.
 
 ## License
 
