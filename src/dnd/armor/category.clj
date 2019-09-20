@@ -14,14 +14,14 @@
 (def heavy
   {:name :heavy
    :don  {:q 10 :u minutes}
-   :doff {:q 5 :u minutes}})
+   :doff {:q 5  :u minutes}})
 
 (def shields
   {:name :shields
    :don  {:q 1 :u actions}
    :doff {:q 1 :u actions}})
 
-(defn light?  [armor] (= light  (armor :category)))
-(defn medium? [armor] (= medium (armor :category)))
-(defn heavy?  [armor] (= heavy  (armor :category)))
-(defn shield? [armor] (= shield (armor :category)))
+(defn light?  [armor] (= light   (armor :category)))
+(defn medium? [armor] (= medium  (armor :category)))
+(defn heavy?  [armor] (= heavy   (armor :category)))
+(defn shield? [armor] (= shields (armor :category)))

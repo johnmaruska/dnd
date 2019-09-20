@@ -1,6 +1,6 @@
 (ns dnd.weapon.martial
   (:require
-   [dnd.dice :refer d4 d6 d8 d10 d12]
+   [dnd.dice :refer [d4 d6 d8 d10 d12]]
    [dnd.weapon.util :as util :refer [ammunition
                                      bludgeoning
                                      damage

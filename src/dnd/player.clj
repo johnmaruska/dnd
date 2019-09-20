@@ -1,6 +1,8 @@
 (ns dnd.player
-  (:require [dnd.stat :as stat]
-            [dnd.util :as util]))
+  (:require
+   [clojure.set :refer [union]]
+   [dnd.stat :as stat]
+   [dnd.util :as util]))
 
 (def blank-slate
   {:level 1

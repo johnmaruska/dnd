@@ -1,6 +1,4 @@
-(ns dnd.language
-  (:require [clojure.set :as set]))
-
+(ns dnd.language)
 
 (def abyssal :abyssal)
 (def celestial :celestial)
@@ -21,4 +19,4 @@
 
 (def standard #{common dwarvish elvish giant gnomish goblin halfling orc})
 (def exotic #{abyssal celestial draconic deep-speech infernal primordial sylvan undercommon})
-(def all (set/union standard exotic))
+(def all (clojure.set/union standard exotic))
