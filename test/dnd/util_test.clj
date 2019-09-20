@@ -11,7 +11,9 @@
 
 (deftest div
   (testing "rounds down to integer"
-    (is (= 2 (sut/div 13 5)))))
+    (is (= 2 (sut/div 13 5))))
+  (testing "rounds negatives down"
+    (is (= -3 (sut/div -13 5)))))
 
 (deftest ->copper
   (testing "converts currency amount to total copper value"

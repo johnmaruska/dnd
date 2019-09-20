@@ -30,17 +30,14 @@
 (defn ->height [inches]
   {:feet (div inches 12) :inches (rem inches 12)})
 
-
 ;;;; Time
 
 (def minutes :minutes)
 (def actions :actions)
 
-
 ;;;; Status signifiers
 
 (def disadvantage :disadvantage)
-
 
 ;;;; Damage
 

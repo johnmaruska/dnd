@@ -47,7 +47,7 @@
 (defn wis-modifier [player] (get-ability-modifier player stat/WIS))
 
 (defn proficiency-bonus [player]
-  ;; magic numbers derived from tables provided in PHB
   (-> (:level player)
+      (- 1)
       (util/div 4)
       (+ 2)))

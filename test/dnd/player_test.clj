@@ -73,3 +73,18 @@
                                                      (map (fn [s] [s score]))
                                                      (into {}))}]
                  (is (= (modifier-table score) (ability-fn score-map)))))))))
+
+(defn- proficiency-table [level]
+  (case level
+    (1 2 3 4)     2
+    (5 6 7 8)     3
+    (9 10 11 12)  4
+    (13 14 15 16) 5
+    (17 18 19 20) 6))
+
+(deftest proficiency-bonus
+  (testing "calculated bonus matches table"
+    (let [possible-levels (vec (map inc (range 20)))]
+      (dorun (for [level possible-levels]
+               (is (= (proficiency-table level)
+                      (sut/proficiency-bonus {:level level}))))))))
