@@ -2,39 +2,35 @@
   (:require [dnd.armor.category :refer [heavy]]
             [dnd.util :refer [disadvantage]]))
 
-(def ring-mail
-  {:name :ring-mail
-   :category heavy
-   :cost {:gold 30}
-   :armor-class (constantly 14)
-   :stealth disadvantage
+(defmacro defheavy [name armor]
+  `(def ~name
+     (-> ~armor
+         (assoc :name ~name
+                :category heavy
+                :stealth disadvantage)
+         (update :armor-class constantly))))
+
+(defheavy ring-mail
+  {:cost {:gold 30}
+   :armor-class 14
    :weight 40})
 
-(def chain-mail
-  {:name :chain-mail
-   :category heavy
-   :cost {:gold 75}
-   :armor-class (constantly 16)
+(defheavy chain-mail
+  {:cost {:gold 75}
+   :armor-class 16
    :strength 13
-   :stealth disadvantage
    :weight 55})
 
-(def splint
-  {:name :splint
-   :category heavy
-   :cost {:gold 200}
-   :armor-class (constantly 17)
+(defheavy splint
+  {:cost {:gold 200}
+   :armor-class 17
    :strength 15
-   :stealth disadvantage
    :weight 60})
 
-(def plate
-  {:name :plate
-   :category heavy
-   :cost {:gold 1500}
-   :armor-class (constantly 18)
+(defheavy plate
+  {:cost {:gold 1500}
+   :armor-class 18
    :strength 15
-   :stealth disadvantage
    :weight 65})
 
 (def all #{ring-mail chain-mail splint plate})

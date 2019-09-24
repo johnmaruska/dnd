@@ -4,6 +4,8 @@
             [clojure.pprint :as pprint]
             [clojure.test :refer [deftest testing is are]]))
 
+(def blank-player sut/blank)
+
 (deftest set-level
   ;; TODO: do I want to exception/handle instead?
   (testing "enforces maximum level 20"
@@ -19,24 +21,26 @@
 
 (deftest add-proficiency
   (testing "adds a proficiency"
-    (is (contains? (-> {:proficiencies {:skill #{}}}
-                       (sut/add-proficiency :skill :fake-skill)
-                       (get-in [:proficiencies :skill]))
-                   :fake-skill))))
+    (let [player (sut/add-proficiency blank-player :skill :fake-skill)]
+      (is (contains? (get-in player [:proficiencies :skill]) :fake-skill)))))
+
+(deftest proficient?
+  (testing "true when proficient"
+    (is (true? (-> blank-player
+                   (sut/add-proficiency :skill :fake-skill)
+                   (sut/proficient?     :skill :fake-skill)))))
+  (testing "false when not proficient"
+    (is (false? (sut/proficient? blank-player :skill :fake-skill)))))
 
 (deftest add-language
   (testing "adds a language"
-    (is (contains? (-> {:languages #{}}
-                       (sut/add-language :orcish)
-                       :languages)
-                   :orcish))))
+    (let [player (sut/add-language blank-player :orcish)]
+      (is (contains? (player :languages) :orcish)))))
 
 (deftest add-feat
   (testing "adds a feat"
-    (is (contains? (-> {:feats #{}}
-                       (sut/add-feat :ex-feat)
-                       :feats)
-                   :ex-feat))))
+    (let [player (sut/add-feat blank-player :ex-feat)]
+      (is (contains? (player :feats) :ex-feat)))))
 
 ;;; Player's Handbook page 13
 (defn- modifier-table [score]
@@ -69,10 +73,10 @@
                            sut/wis-modifier]]
       (dorun (for [ability-fn ability-fns
                    score      possible-scores]
-               (let [score-map {:ability-scores (->> stat/all
-                                                     (map (fn [s] [s score]))
-                                                     (into {}))}]
-                 (is (= (modifier-table score) (ability-fn score-map)))))))))
+               (let [score-map      (into {} (map (fn [s] [s score]) stat/all))
+                     statted-player (-> blank-player
+                                        (stat/with-custom-scores score-map))]
+                 (is (= (modifier-table score) (ability-fn statted-player)))))))))
 
 (defn- proficiency-table [level]
   (case level
@@ -84,7 +88,7 @@
 
 (deftest proficiency-bonus
   (testing "calculated bonus matches table"
-    (let [possible-levels (vec (map inc (range 20)))]
-      (dorun (for [level possible-levels]
-               (is (= (proficiency-table level)
-                      (sut/proficiency-bonus {:level level}))))))))
+    (dorun
+     (for [level (vec (map inc (range 20)))]
+       (let [leveled-player (set-level blank-player level)]
+         (is (= (proficiency-table level) (sut/proficiency-bonus))))))))

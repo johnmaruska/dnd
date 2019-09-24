@@ -4,6 +4,13 @@
    [dnd.stat :as stat]
    [dnd.util :as util]))
 
+(def blank
+  {:level         1
+   :feats         #{}
+   :languages     #{}
+   :proficiencies {:skill #{}
+                   :armor #{}}})
+
 (def blank-slate
   {:level 1
    ;; race
@@ -24,6 +31,9 @@
 
 (defn add-proficiency [player type proficiency]
   (update-in player [:proficiencies type] union #{proficiency}))
+
+(defn proficient? [player type proficiency]
+  (contains? (get-in player [:proficiencies type]) proficiency))
 
 (defn add-language [player proficiency]
   (update player :languages union #{proficiency}))
