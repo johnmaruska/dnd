@@ -1,7 +1,8 @@
 (ns dnd.armor
   (:require
    [clojure.set :refer [union]]
-   [dnd.armor.category :refer [shields]]
+   [dnd.armor.category :as category]
+   [dnd.equipment :refer [equipped-item]]
    [dnd.player :as player]))
 
 ;; Player's Handbook p144-146
@@ -11,7 +12,7 @@
 ;;       move `def shield` to `dnd.armor.shield/shield`?
 (def shield
   {:name              :shield
-   :category          shields
+   :category          category/shields
    :cost              {:gold 10}
    :armor-class-bonus 2
    :weight            6})
@@ -24,16 +25,17 @@
   (+ 10 (player/dex-modifier player)))
 
 (defn ac-from-shield [player]
-  (if (-> player :equipment :shield :equipped?)
-    (-> player :equipment :shield :armor-class-bonus)
-    0))
+  (or (when-let [offhand (equipped-item player :off-hand)]
+        (when (category/shield? offhand)
+          (:armor-class-bonus offhand)))
+      0))
 
 (defn armor-class [player]
   (let [armor (-> player :equipment :armor)
-        ac-from-armor (if-let [armor (equipped-item player :armor)]
-                        (armor :armor-class)
-                        base-armor-class)]
-    (+ (ac-from-armor player)
-       (ac-from-shield player))))
+        armor-ac (when-let [armor (equipped-item player :armor)]
+                   (armor :armor-class))]
+    (+ ((or armor-ac
+            base-armor-class) player)
+       (or (ac-from-shield player) 0))))
 
 (def proficient? #(player/proficient? %1 :armor %2))

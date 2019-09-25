@@ -90,5 +90,6 @@
   (testing "calculated bonus matches table"
     (dorun
      (for [level (vec (map inc (range 20)))]
-       (let [leveled-player (set-level blank-player level)]
-         (is (= (proficiency-table level) (sut/proficiency-bonus))))))))
+       (let [leveled-player (sut/set-level blank-player level)]
+         (is (= (proficiency-table level)
+                (sut/proficiency-bonus leveled-player))))))))

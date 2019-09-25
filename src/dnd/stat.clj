@@ -1,7 +1,7 @@
 (ns dnd.stat
   (:refer-clojure :rename {+ core-add
                            inc core-inc})
-  (:require [dnd.dice :as dice]))
+  (:require [dnd.dice :as dice :refer [d6]]))
 
 (def CHA :charisma)
 (def CON :constitution)
@@ -48,12 +48,14 @@
   (with-custom-scores player stat-prio-order standard-scores))
 
 (defn with-random-scores
-  [player stat-prio-order]
-  {:pre [(= 6 (count stat-prio-order))]}
-  (let [roll-stat (fn [] (->> (repeatedly 4 #(dice/roll :d6))
-                              (sort >)
-                              (take 3)
-                              (reduce +)))]
-    (->> (repeatedly 6 roll-stat)
-         (sort >)
-         (with-custom-scores player stat-prio-order))))
+  ([player]
+   (with-random-scores player (shuffle all)))
+  ([player stat-prio-order]
+   {:pre [(= 6 (count stat-prio-order))]}
+   (let [roll-stat (fn [] (->> (dice/roll 4 d6)
+                               (sort >)
+                               (take 3)
+                               (reduce +)))]
+     (->> (repeatedly 6 roll-stat)
+          (sort >)
+          (with-custom-scores player stat-prio-order)))))
