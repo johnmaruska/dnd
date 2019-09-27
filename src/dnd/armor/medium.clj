@@ -3,43 +3,41 @@
             [dnd.player :as player]
             [dnd.util :as util]))
 
-(defn armor-class [base pc] (+ base (min 2 (player/dex-modifier pc))))
+(defn armor-class [base pc]
+  (+ base (min 2 (player/dex-modifier pc))))
 
-(def hide
-  {:name :hide
-   :category medium
-   :cost {:gold 10}
-   :armor-class (partial armor-class 12)
-   :weight 12})
+(defmacro defmedium [name armor]
+  `(def ~name
+     (-> ~armor
+         (assoc :name (keyword ~name)
+                :category medium)
+         (update :armor-class #(partial armor-class %1)))))
 
-(def chain-shirt
-  {:name :chain-shirt
-   :category medium
-   :cost {:gold 50}
-   :armor-class (partial armor-class 13)
-   :weight 20})
+(defmedium hide
+  {:cost        {:gold 10}
+   :armor-class 12
+   :weight      12})
 
-(def scale-mail
-  {:name :scale-mail
-   :category medium
-   :cost {:gold 50}
-   :armor-class (partial armor-class 14)
-   :stealth util/disadvantage
-   :weight 45})
+(defmedium chain-shirt
+  {:cost        {:gold 50}
+   :armor-class 13
+   :weight      20})
 
-(def breastplate
-  {:name :breastplate
-   :category medium
-   :cost {:gold 400}
-   :armor-class (partial armor-class 14)
-   :weight 20})
+(defmedium scale-mail
+  {:cost        {:gold 50}
+   :armor-class 14
+   :stealth     util/disadvantage
+   :weight      45})
 
-(def half-plate
-  {:name :half-plate
-   :category medium
-   :cost {:gold 750}
-   :armor-class (partial armor-class 15)
-   :stealth util/disadvantage
-   :weight 40})
+(defmedium breastplate
+  {:cost        {:gold 400}
+   :armor-class 14
+   :weight      20})
+
+(defmedium half-plate
+  {:cost        {:gold 750}
+   :armor-class 15
+   :stealth     util/disadvantage
+   :weight      40})
 
 (def all #{hide chain-shirt scale-mail breastplate half-plate})

@@ -5,26 +5,27 @@
 
 (defn armor-class [base pc] (+ base (player/dex-modifier pc)))
 
-(def padded
-  {:name :padded
-   :category light
-   :cost {:gold 5}
-   :armor-class (partial armor-class 11)
-   :stealth util/disadvantage
-   :weight 8})
+(defmacro deflight [name armor]
+  `(def ~name
+     (-> ~armor
+         (assoc :name (keyword ~name)
+                :category light)
+         (update :armor-class #(partial armor-class %1)))))
 
-(def leather
-  {:name :leather
-   :category light
-   :cost {:gold 10}
-   :armor-class (partial armor-class 11)
-   :weight 10})
+(deflight padded
+  {:cost        {:gold 5}
+   :armor-class 11
+   :stealth     util/disadvantage
+   :weight      8})
 
-(def studded-leather
-  {:name :studded-leather
-   :category light
-   :cost {:gold 45}
-   :armor-class (partial armor-class 12)
-   :weight 13})
+(deflight leather
+  {:cost        {:gold 10}
+   :armor-class 11
+   :weight      10})
+
+(deflight studded-leather
+  {:cost        {:gold 45}
+   :armor-class 12
+   :weight      13})
 
 (def all #{padded leather studded-leather})
