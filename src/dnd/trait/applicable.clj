@@ -13,7 +13,8 @@
 (defn as-trait [trait]
   (assoc trait :type :static))
 
-(defn ability-score-increase [ability amount & {:keys [max]}]
+(defn ability-score-increase
+  [ability amount & {:keys [max] :or {max stat/max-value}}]
   (as-trait
    {:name  :ability-score-increase
     :apply #(stat/increase-ability-score % ability amount :max max)}))

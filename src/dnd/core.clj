@@ -29,6 +29,6 @@
   (let [stat-prio   (prompt-for-stat-priority)
         chosen-race (prompt-for-race)]
     (pprint/pprint
-     (-> player/blank-slate
+     (-> player/blank
          (stat/with-standard-scores stat-prio)
          (race/with-race chosen-race)))))

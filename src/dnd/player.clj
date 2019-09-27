@@ -6,21 +6,11 @@
 
 (def blank
   {:level         1
+   :experience    0
    :feats         #{}
    :languages     #{}
    :proficiencies {:skill #{}
                    :armor #{}}})
-
-(def blank-slate
-  {:level 1
-   ;; race
-   ;; size
-   ;; base-speeed
-   ;; features-traits
-   ;; choosable-traits
-   :experience 0
-   :proficiency-bonus 2
-   :languages #{}})
 
 (defn set-level [player level]
   (-> player

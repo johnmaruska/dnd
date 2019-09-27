@@ -27,7 +27,7 @@
     player))
 
 (def bruenor
-  (-> player/blank-slate
+  (-> player/blank
       (stat/apply-standard-scores stat-priority)
       (race/with-race race/dark-elf)))
 

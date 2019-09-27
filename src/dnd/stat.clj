@@ -1,6 +1,7 @@
 (ns dnd.stat
   (:refer-clojure :rename {+ core-add
-                           inc core-inc})
+                           inc core-inc}
+                  :exclude [max])
   (:require [dnd.dice :as dice :refer [d6]]))
 
 (def CHA :charisma)
