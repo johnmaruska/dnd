@@ -1,14 +1,10 @@
 (ns dnd.armor.heavy
   (:require [dnd.armor.category :refer [heavy]]
+            [dnd.armor.util :as util]
             [dnd.util :refer [disadvantage]]))
 
-(defmacro defheavy [name armor]
-  `(def ~name
-     (-> ~armor
-         (assoc :name ~name
-                :category heavy
-                :stealth disadvantage)
-         (update :armor-class constantly))))
+(defmacro defheavy [a-name armor]
+  `(util/defarmor ~a-name heavy constantly (assoc ~armor :stealth disadvantage)))
 
 (defheavy ring-mail
   {:cost {:gold 30}

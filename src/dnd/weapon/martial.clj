@@ -1,6 +1,5 @@
 (ns dnd.weapon.martial
   (:require
-   [clojure.set :refer [union]]
    [dnd.dice :refer [d4 d6 d8 d10 d12]]
    [dnd.weapon.util :as util :refer [ammunition
                                      bludgeoning
@@ -17,15 +16,13 @@
                                      two-handed
                                      versatile]]))
 
-;;;; Melee Weapons
+(defmacro defmelee [w-name weapon]
+  `(util/defweapon ~w-name util/martial util/melee ~weapon))
 
-(defmacro defmelee [wname weapon]
-  `(def ~wname
-     (-> ~weapon
-         (assoc :name (keyword (name '~wname))
-                :category util/martial
-                :type util/melee)
-         (update :damage #(apply damage %1)))))
+(defmacro defranged [w-name weapon]
+  `(util/defweapon ~w-name util/martial util/ranged ~weapon))
+
+;;;; Melee Weapons
 
 (defmelee battleaxe
   {:cost       {:gold 10}
@@ -137,14 +134,6 @@
 
 ;;;; Ranged Weapons
 
-(defmacro defranged [name weapon]
-  `(def ~name
-     (-> ~weapon
-         (assoc :name ~name
-                :category util/martial
-                :type util/ranged)
-         (update :damage #(apply damage %1)))))
-
 (defranged blowgun
   {:cost {:gold 10}
    :damage [1 piercing]
@@ -183,4 +172,4 @@
 
 (def ranged #{blowgun hand-crossbow heavy-crossbow longbow net})
 
-(def all (union melee ranged))
+(def all (clojure.set/union melee ranged))

@@ -19,9 +19,9 @@
     :apply #(stat/increase-ability-score % ability amount :max max)}))
 
 (deftrait drow-weapon-training
-  (let [proficiencies #{weapon/rapier
-                        weapon/shortsword
-                        weapon/hand-crossbow}]
+  (let [proficiencies #{(weapon/get :rapier)
+                        (weapon/get :shortsword)
+                        (weapon/get :hand-crossbow)}]
     {:name  :drow-weapon-training
      :apply #(update-in % [:proficiencies :weapons] union proficiencies)}))
 
@@ -31,18 +31,18 @@
      :apply #(update-in % [:proficiencies :armor] union proficiencies)}))
 
 (deftrait dwarven-combat-training
-  (let [proficiencies #{weapon/battleaxe
-                        weapon/handaxe
-                        weapon/throwing-hammer
-                        weapon/warhammer}]
+  (let [proficiencies #{(weapon/get :battleaxe)
+                        (weapon/get :handaxe)
+                        (weapon/get :throwing-hammer)
+                        (weapon/get :warhammer)}]
     {:name  :dwarven-combat-training
      :apply #(update-in % [:proficiencies :weapons] union proficiencies)}))
 
 (deftrait elf-weapon-training
-  (let [proficiencies #{weapon/longsword
-                        weapon/shortsword
-                        weapon/shortbow
-                        weapon/longbow}]
+  (let [proficiencies #{(weapon/get :longsword)
+                        (weapon/get :shortsword)
+                        (weapon/get :shortbow)
+                        (weapon/get :longbow)}]
     {:name  :elf-weapon-training
      :apply #(update-in % [:proficiencies :weapons] union proficiencies)}))
 
@@ -67,7 +67,7 @@
 ;; all that don't require
 (def all #{drow-weapon-training
            dwarven-combat-training
-           dwarven-armor-traing
+           dwarven-armor-training
            elf-weapon-training
            fleet-of-foot
            keen-senses

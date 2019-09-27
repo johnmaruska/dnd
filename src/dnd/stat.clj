@@ -12,16 +12,19 @@
 (def all [CHA CON DEX INT STR WIS])
 
 (def standard-scores [15 14 13 12 10 8])
+(def max-value 30)
 
 (defn + [& args]
-  (min 30 (or (apply core-add args) 0)))
+  (min max-value (or (apply core-add args) 0)))
 (defn inc [n]
-  (min 30 (core-inc n)))
+  (min max-value (core-inc n)))
 
 (defn set-ability-score [player stat value]
   (assoc-in player [:ability-scores stat] value))
-(defn increase-ability-score [player stat amount]
-  (update-in player [:ability-scores stat] + amount))
+(defn increase-ability-score [player stat amount & {:keys [max]
+                                                    :or {max max-value}}]
+  (with-redefs [max-value max]
+    (update-in player [:ability-scores stat] + amount)))
 
 ;; TODO: ability score point cost
 ;; Player's Handbook Ch1.3 page 13

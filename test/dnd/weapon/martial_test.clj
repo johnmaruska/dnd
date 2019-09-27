@@ -14,3 +14,14 @@
   (testing "adds damage"
     (is (= {:dice {:d8 1} :type util/slashing}
            (:damage sut/battleaxe)))))
+
+(deftest defranged
+  (testing "adds name"
+    (is (= :heavy-crossbow (:name sut/heavy-crossbow))))
+  (testing "adds category"
+    (is (= util/martial (:category sut/heavy-crossbow))))
+  (testing "adds type"
+    (is (= util/ranged (:type sut/heavy-crossbow))))
+  (testing "adds damage"
+    (is (= {:dice {:d10 1} :type util/piercing}
+           (:damage sut/heavy-crossbow)))))

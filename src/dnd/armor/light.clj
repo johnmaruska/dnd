@@ -1,21 +1,18 @@
 (ns dnd.armor.light
   (:require [dnd.armor.category :refer [light]]
+            [dnd.armor.util :as util]
             [dnd.player :as player]
-            [dnd.util :as util]))
+            [dnd.util :refer [disadvantage]]))
 
 (defn armor-class [base pc] (+ base (player/dex-modifier pc)))
 
-(defmacro deflight [name armor]
-  `(def ~name
-     (-> ~armor
-         (assoc :name (keyword ~name)
-                :category light)
-         (update :armor-class #(partial armor-class %1)))))
+(defmacro deflight [a-name armor]
+  `(util/defarmor ~a-name light #(partial armor-class %1) ~armor))
 
 (deflight padded
   {:cost        {:gold 5}
    :armor-class 11
-   :stealth     util/disadvantage
+   :stealth     disadvantage
    :weight      8})
 
 (deflight leather

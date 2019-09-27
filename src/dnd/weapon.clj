@@ -1,5 +1,5 @@
 (ns dnd.weapon
-  (:refer-clojure :exclusions [get])
+  (:refer-clojure :exclude [get])
   (:require [clojure.set :refer [union]]
             [dnd.dice :as dice :refer [d4 d6 d8 d10 d12]]
             [dnd.player :as player]
@@ -10,7 +10,7 @@
 
 (def ^:private table
   (->> (clojure.set/union martial/all simple/all)
-       (map #([(:name weapon) weapon]))
+       (map (fn [weapon] [(:name weapon) weapon]))
        (into {})))
 
 (defn get [weapon-name]

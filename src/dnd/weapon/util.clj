@@ -55,3 +55,11 @@
 
 (defn melee? [weapon] (= :melee (:type weapon)))
 (defn ranged? [weapon] (= :ranged (:type weapon)))
+
+(defmacro defweapon [w-name category type body]
+  `(def ~w-name
+     (-> ~body
+         (assoc :name (keyword (name '~w-name))
+                :category ~category
+                :type ~type)
+         (update :damage #(apply damage %1)))))
