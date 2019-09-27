@@ -5,6 +5,8 @@
             [clojure.test :refer [deftest testing is are]]))
 
 (deftest defmelee
+  (testing "adds name"
+    (is (= :battleaxe (:name sut/battleaxe))))
   (testing "adds category"
     (is (= util/martial (:category sut/battleaxe))))
   (testing "adds type"

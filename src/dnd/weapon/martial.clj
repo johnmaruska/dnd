@@ -1,5 +1,6 @@
 (ns dnd.weapon.martial
   (:require
+   [clojure.set :refer [union]]
    [dnd.dice :refer [d4 d6 d8 d10 d12]]
    [dnd.weapon.util :as util :refer [ammunition
                                      bludgeoning
@@ -18,10 +19,10 @@
 
 ;;;; Melee Weapons
 
-(defmacro defmelee [name weapon]
-  `(def ~name
+(defmacro defmelee [wname weapon]
+  `(def ~wname
      (-> ~weapon
-         (assoc :name ~name
+         (assoc :name (keyword (name '~wname))
                 :category util/martial
                 :type util/melee)
          (update :damage #(apply damage %1)))))
@@ -182,4 +183,4 @@
 
 (def ranged #{blowgun hand-crossbow heavy-crossbow longbow net})
 
-(def all (clojure.set/union melee ranged))
+(def all (union melee ranged))

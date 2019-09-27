@@ -14,10 +14,10 @@
 
 ;;;; Melee Weapons
 
-(defmacro defmelee [name weapon]
-  `(def ~name
+(defmacro defmelee [wname weapon]
+  `(def ~wname
      (-> ~weapon
-         (assoc :name ~name
+         (assoc :name (keyword (name '~wname))
                 :category util/simple
                 :type util/melee)
          (update :damage #(apply damage %1)))))
