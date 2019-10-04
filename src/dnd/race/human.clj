@@ -5,7 +5,8 @@
    [dnd.language :as language]
    [dnd.skill :as skill]
    [dnd.stat :as stat]
-   [dnd.trait :as trait]))
+   [dnd.trait :as trait]
+   [dnd.trait.choice :as choice-traits]))
 
 (def traits
   {:race :human
@@ -17,7 +18,7 @@
    :base-speed 30
    :languages #{language/common}
    :applicable-traits (map #(trait/ability-score-increase % 1) stat/all)
-   :choosable-traits [{:extra-language language/all}]})
+   :choosable-traits [choice-traits/extra-language]})
 
 (def variant-traits-ability-score
   (-> traits

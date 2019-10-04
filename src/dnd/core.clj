@@ -22,6 +22,22 @@
                   :style :alphabetical
                   :type :order))
 
+(defn prompt-for-choosable-trait [player trait]
+  (io/prompt-user (format "Your character has a choice from trait %s."
+                          (:name trait))
+                  ;; TODO: have to remove options already taken
+                  (vec (:options trait))  ; TODO: into vec? what happens if already vec?
+                  "Which option would you like?"))
+
+(defn prompt-for-choosable-traits [player]
+  ;; iterate over all choosable traits
+  ;; need to know what trait is, what options are, how to apply them
+  (reduce (fn [player trait]
+            (let [choice (prompt-for-choosable-trait player trait)]
+              ((:applicable trait) player choice)))
+          (dissoc player :choosable-traits)
+          (:choosable-traits player)))
+
 (defn -main
   "I don't do a whole lot ... yet."
   [& _args]
@@ -31,4 +47,5 @@
     (pprint/pprint
      (-> player/blank
          (stat/with-standard-scores stat-prio)
-         (race/with-race chosen-race)))))
+         (race/with-race chosen-race)
+         (prompt-for-choosable-traits)))))
